@@ -1,0 +1,54 @@
+schema_version: 1
+progress: {alpha: 1.4, beta: 1.4} # beta distribution; --progress fixes t for inspection
+voxel_mm: 2.5
+max_grid_voxels: 20000000
+# All imported target structures except contextual lung are enveloped.
+envelope_class_ids: [3, 4, 5, 6, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 27, 28, 30]
+fat_thickness_mm: 6.0
+esophageal_fat_thickness_mm: 8.0
+pleura_thickness_mm: 2.5
+pleura_surface_thickness_mm: 0.3 # physical mesh thickness, separate from voxel envelope offset
+noise_correlation_mm: 9.0
+noise_amplitude_mm: 2.5
+noise_seed: 5721
+# An illustrative ordered prior, NOT an authoritative MIE protocol.
+# Ellipsoid windows are cumulative and grow monotonically within each interval.
+phases:
+  - {name: pre_incision, interval: [0.0, 0.15], windows: []}
+  - name: pleura_inferior_ligament_region
+    interval: [0.15, 0.35]
+    windows:
+      - {anchor: inferior, offset_mm: [8, 0, 0], radii_mm: [35, 24, 60]}
+  - name: azygos_exposure
+    interval: [0.35, 0.50]
+    windows:
+      - {anchor: azygos, offset_mm: [6, 0, 0], radii_mm: [40, 30, 35]}
+  - name: periesophageal_dissection
+    interval: [0.50, 0.78]
+    windows:
+      - {anchor: esophagus, offset_mm: [4, 0, 0], radii_mm: [50, 40, 110]}
+      - {anchor: bronchus, offset_mm: [0, 0, 0], radii_mm: [40, 35, 35]}
+  - name: upper_mediastinum
+    interval: [0.78, 1.0]
+    windows:
+      - {anchor: upper, interval: [0.78, 0.92], offset_mm: [0, 0, 0], radii_mm: [65, 45, 75]}
+      - {anchor: aorta, interval: [0.92, 1.0], offset_mm: [0, 0, 0], radii_mm: [40, 35, 100]}
+resection:
+  enabled: true
+  probability: 0.65
+  # Thin islands on the remaining fat adjacent to removed regions, never on organ surfaces.
+  rim_mm: 4.0
+  noise_threshold: 0.2
+blood:
+  enabled: true
+  probability: 0.35
+  gravity_ras: [0, 1, 0] # prone illustrative direction; calibrate for semi-prone
+  dependent_quantile: 0.85
+  radius_mm: {mean: 4.0, sd: 1.0, min: 2.0, max: 6.0}
+  depth_mm: 1.0
+instruments:
+  count: {values: [0, 1, 2], weights: [0.35, 0.45, 0.20]}
+  shaft_radius_mm: 2.0
+  jaw_length_mm: 8.0
+  jaw_angle_deg: 18.0
+  target_jitter_sd_mm: 6.0

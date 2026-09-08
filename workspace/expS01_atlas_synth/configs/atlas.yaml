@@ -1,0 +1,46 @@
+schema_version: 1
+blend: Z-Anatomy/Startup.blend
+sha256: 9f08a17ea0115fed80b2a73ecdf0a1bc2ab2f6956f37c593ce23d513ea35afcd
+status: provisional_object_identity_not_fma_verified
+context_class_id: 0 # right ribs: provisional background; set 2 only if official Other definition includes them
+source_url: https://github.com/Z-Anatomy/Models-of-human-anatomy
+license: CC-BY-SA-4.0
+attribution: "Z-Anatomy; BodyParts3D — DBCLS. See upstream per-component credits."
+# Atlas Blender coordinates are metres with right=-X, anterior=-Y.
+# All downstream geometry is in canonical patient RAS millimetres.
+atlas_to_ras_mm:
+  - [-1000, 0, 0, 0]
+  - [0, -1000, 0, 0]
+  - [0, 0, 1000, -1300]
+  - [0, 0, 0, 1]
+roi_mm: [[-160, -130, -160], [160, 130, 180]]
+unavailable_class_ids: [2, 8, 9, 11, 22, 26, 27, 28, 29, 30]
+objects:
+  3: [Trachea]
+  4: [Right main bronchus]
+  5: [Left main bronchus]
+  6: [Oesophagus]
+  12: [Right inferior pulmonary vein, Left inferior pulmonary vein]
+  13: [Right subclavian artery]
+  14: ["Vagus nerve (X).r"]
+  15: [Ascending aorta, Aortic arch, Thoracic aorta]
+  16: [Azygos vein]
+  17: [Superior vena cava]
+  18: [Inferior lobe of left lung, Inferior lobe of right lung, Middle lobe of right lung, Superior lobe of left lung, Superior lobe of right lung]
+  19: [Paratracheal thoracic nodes, Inferior tracheobronchial nodes, Superior tracheobronchial nodes, Juxta-oesophageal nodes, Subaortic nodes, Node of arch of azygos vein]
+  21: [Left subclavian artery]
+  23: [Pulmonary trunk, Bifurcation of pulmonary trunk, Right pulmonary artery, Left pulmonary artery]
+# Explicit named anchors are illustrative priors derived from the existing atlas coordinates.
+# Replace with reviewed coordinates, or warp them using the optional CT registration.
+landmarks_mm:
+  carina: [0, -8, 60]
+  bronchus: [8, -12, 48]
+  esophagus: [-3, -17, -8]
+  azygos: [12, -5, 68]
+  aorta: [-16, -22, -20]
+  upper: [0, -12, 122]
+  inferior: [0, -10, -92]
+right_lung_collapse:
+  enabled: true
+  lateral_pivot_mm: 120.0
+  scale: [0.35, 0.65, 0.85]

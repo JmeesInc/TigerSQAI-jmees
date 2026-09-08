@@ -1,0 +1,33 @@
+# Configuration TEMPLATE only: not an invented patient, not ready to render.
+# Replace every null and verify source/target landmarks before status: reviewed.
+status: needs_local_landmark_review
+patient_id: null
+source_url: https://zenodo.org/records/10047292
+license: CC-BY-4.0
+attribution: "Wasserthal et al., TotalSegmentator dataset v2.0.1"
+regularization: 0.001
+minimum_jacobian_determinant: 0.05
+roi_mm: null                     # [[min R,A,S], [max R,A,S]] in CT RAS millimetres
+thorax_center_xy_mm: null         # patient midline and thorax AP reference
+right_lung_lateral_pivot_mm: null # actual CT RAS coordinate, not atlas default
+landmark_pairs:
+  # >= 5 noncoplanar pairs; use >= 8-12 distributed landmarks in practice.
+  # Use vertebral landmarks plus carina/airway and aortic landmarks.
+  - {name: vertebra_T3, group: skeleton, atlas_ras_mm: null, ct_ras_mm: null}
+  - {name: vertebra_T6, group: skeleton, atlas_ras_mm: null, ct_ras_mm: null}
+  - {name: vertebra_T9, group: skeleton, atlas_ras_mm: null, ct_ras_mm: null}
+  - {name: carina, group: trachea, atlas_ras_mm: null, ct_ras_mm: null}
+  - {name: upper_trachea, group: trachea, atlas_ras_mm: null, ct_ras_mm: null}
+  - {name: aortic_arch, group: aorta, atlas_ras_mm: null, ct_ras_mm: null}
+  - {name: descending_aorta_upper, group: aorta, atlas_ras_mm: null, ct_ras_mm: null}
+  - {name: descending_aorta_lower, group: aorta, atlas_ras_mm: null, ct_ras_mm: null}
+masks:
+  - name: trachea
+    fine_id: 3
+    path: null                  # absolute path to a PUBLIC CT mask, not challenge data
+    sha256: null
+    source_url: https://zenodo.org/records/10047292
+    license: CC-BY-4.0
+  # Add esophagus(6), aorta(15), superior_vena_cava(17), and five lung lobes(18).
+  # Multiple same-fine_id masks are merged at scene level.
+  # For multilabel NIfTI specify label_values: [the verified source label ID].

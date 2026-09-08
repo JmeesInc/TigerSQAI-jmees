@@ -1,0 +1,34 @@
+# 公式 labelmap の fine 配色 (公開の公式評価コード由来)。render.visualize --palette 用
+schema_version: 1
+palette:
+  0: [0, 0, 0]  # Background
+  1: [184, 61, 245]  # Instrument
+  2: [134, 0, 251]  # Other
+  3: [0, 255, 220]  # Trachea
+  4: [131, 224, 112]  # Right main bronchus
+  5: [191, 224, 112]  # Left main bronchus
+  6: [253, 189, 0]  # Esophagus
+  7: [255, 224, 32]  # Fatty tissue esophagus
+  8: [207, 164, 117]  # Right inferior pulmonary ligament
+  9: [234, 204, 159]  # Left inferior pulmonary ligament
+  10: [15, 126, 87]  # Pleura
+  11: [153, 76, 13]  # Pericardium
+  12: [51, 221, 255]  # Inferior pulmonary vein
+  13: [255, 142, 142]  # Right subclavian artery
+  14: [255, 239, 179]  # Right vagal nerve
+  15: [255, 0, 7]  # Aorta
+  16: [0, 6, 255]  # Azygos vein
+  17: [50, 183, 250]  # Superior caval vein
+  18: [17, 139, 57]  # Lung
+  19: [255, 0, 204]  # Lymph node
+  20: [250, 250, 55]  # Fatty tissue
+  21: [255, 136, 178]  # Left subclavian artery
+  22: [255, 73, 162]  # Right bronchial artery
+  23: [255, 161, 136]  # Pulmonary artery
+  24: [173, 0, 0]  # Pool of blood
+  25: [128, 128, 128]  # Resection area
+  26: [245, 147, 49]  # Gastric conduit
+  27: [218, 161, 69]  # Right recurrent laryngeal nerve
+  28: [255, 217, 129]  # Left recurrent laryngeal nerve
+  29: [219, 219, 56]  # Omentum
+  30: [201, 138, 118]  # Thoracic duct

@@ -1,0 +1,9 @@
+# Local validation: Python 3.12.14; macOS arm64; Blender 4.5.9 LTS CPU
+numpy==2.3.5
+scipy==1.18.1
+scikit-image==0.26.0
+trimesh==5.1.0
+PyYAML==6.0.3
+Pillow==12.3.0
+OpenEXR==3.4.15
+nibabel==5.4.2

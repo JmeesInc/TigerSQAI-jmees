@@ -1,0 +1,361 @@
+schema_version: 1
+reviewed_on: "2026-09-08"
+status: "provisional_requires_local_review"
+fine_id_policy: "user_list_order_1_to_30_not_verified_official_mask_values"
+background_id: null
+coarse_mapping: null
+station_nomenclature: "要確認"
+station_labels: ["6L", "6R", "7L", "7R", "8", "9", "10L", "10R", "11L", "11R", "12L", "12R", "13L", "13R"]
+category_definitions:
+  a: "既存アトラス形状を直接利用・変換する候補（評価済み形状のQAは別）"
+  b: "公開CT付属マスクによる患者変動を優先する候補"
+  c: "手続き的な術中状態の生成・既存形状の加工が必要"
+  d: "今回確認した版では正確な対応を作れない（全版で不存在という意味ではない）"
+matching_policy:
+  automatic_assignment_enabled: false
+  fma_ids_meaning: "BodyParts3D 4.0公式索引で検証した概念ID。Z-Anatomy内のID保持・部品への結合は未検証"
+  name_patterns_usage: "case-insensitive regex fullmatch; 候補抽出と手動crosswalk作成専用"
+  z_anatomy_fma_binding: "requires_verified_object_to_fma_sidecar"
+  missing: "error_or_ignore_region_never_silently_background"
+  multiple_class_matches: "error"
+  recursive_ontology_expansion: false
+  require_evaluated_nonempty_geometry: true
+  require_per_asset_license_and_sha256: true
+ct_policy:
+  default_mode: "released_public_ct_masks_to_mesh"
+  pretrained_weights_enabled: false
+  training_data_provenance: "重みごとの全学習データと初期化元が公開と検証できるまで有効化しない"
+  dataset_url: "https://zenodo.org/records/10047292"
+  dataset_license: "CC-BY-4.0"
+  label_namespace: "TotalSegmentator total v2; selected dataset labels must be checked"
+classes:
+  - fine_id: 1
+    name: "Instrument"
+    weight: 1
+    category: c
+    source: procedural
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "器具CADは未選定。まずパラメトリックな軸・関節・把持部を作る。ロボット/胸腔鏡器具の比率と寸法は設定化。"
+  - fine_id: 2
+    name: "Other"
+    weight: 1
+    category: c
+    source: procedural
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "包括的な形状名ではなく主催者定義に基づく明示的な対象集合。未対応解剖や未確定クラスをOtherに落とさない。"
+  - fine_id: 3
+    name: "Trachea"
+    weight: 2
+    category: b
+    source: totalsegmentator
+    match:
+      fma_ids: ["FMA7394"]
+      name_patterns: ["Trachea"]
+    atlas_object_names: ["Trachea"]
+    ct_labels: ["trachea"]
+    notes: "公開CT付属マスクを第一候補に患者変動を供給。アトラスでは4516面を確認。CTラベルの内腔/壁の境界は要確認。"
+  - fine_id: 4
+    name: "Right main bronchus"
+    weight: 2
+    category: a
+    source: z-anatomy
+    match:
+      fma_ids: ["FMA68418"]
+      name_patterns: ["Right\\ main\\ bronchus"]
+    atlas_object_names: ["Right main bronchus"]
+    ct_labels: []
+    notes: "既存Curveにスプラインあり。FMAはright main bronchus properであり中間気管支を含む範囲は要確認。枝を新規生成せず変換。"
+  - fine_id: 5
+    name: "Left main bronchus"
+    weight: 2
+    category: a
+    source: z-anatomy
+    match:
+      fma_ids: ["FMA7396"]
+      name_patterns: ["Left\\ main\\ bronchus"]
+    atlas_object_names: ["Left main bronchus"]
+    ct_labels: []
+    notes: "既存Curveを評価済みメッシュへ変換。葉気管支以遠を含めない。"
+  - fine_id: 6
+    name: "Esophagus"
+    weight: 2
+    category: b
+    source: totalsegmentator
+    match:
+      fma_ids: ["FMA7131"]
+      name_patterns: ["Oesophagus"]
+    atlas_object_names: ["Oesophagus"]
+    ct_labels: ["esophagus"]
+    notes: "CT患者変動を供給。Z-Anatomyにはスプライン付きCurve。Oesophagus-profileは断面補助で対象外。"
+  - fine_id: 7
+    name: "Fatty tissue esophagus"
+    weight: 1
+    category: c
+    source: procedural
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "公開食道メッシュに沿う被覆層を加工し、露出・剥離で切り欠く。一般脂肪との境界・厚さはローカル設定。"
+  - fine_id: 8
+    name: "Right inferior pulmonary ligament"
+    weight: 3
+    category: d
+    source: unavailable
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "調査版で独立形状を同定できず。胸膜からの分割には既存の根拠ある領域指定と解剖監修が必要。現時点で生成対象にしない。"
+  - fine_id: 9
+    name: "Left inferior pulmonary ligament"
+    weight: 3
+    category: d
+    source: unavailable
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "調査版で独立形状を同定できず。右を鏡映して代替しない。既存アトラスの部位指定または別公開アセットが必要。"
+  - fine_id: 10
+    name: "Pleura"
+    weight: 2
+    category: c
+    source: procedural
+    match:
+      fma_ids: []
+      name_patterns: ["Pleura"]
+    atlas_object_names: ["Pleura"]
+    ct_labels: []
+    notes: "アトラス不存在という前提は誤り。3580面の既存胸膜を基に薄膜・開窓・牽引・剥離状態を加工する。臓側/壁側の対象範囲は要確認。"
+  - fine_id: 11
+    name: "Pericardium"
+    weight: 2
+    category: d
+    source: unavailable
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "Z-Anatomy調査版とBodyParts3D 4.0両索引で独立心膜を未同定。心臓やpericardial nodesは代用不可。TotalSegmentator trunk_cavitiesのpericardiumは形状意味・重み由来要確認。"
+  - fine_id: 12
+    name: "Inferior pulmonary vein"
+    weight: 2
+    category: a
+    source: z-anatomy
+    match:
+      fma_ids: ["FMA49911", "FMA49913"]
+      name_patterns: ["Right\\ inferior\\ pulmonary\\ vein", "Left\\ inferior\\ pulmonary\\ vein"]
+    atlas_object_names: ["Right inferior pulmonary vein", "Left inferior pulmonary vein"]
+    ct_labels: []
+    notes: "左右Curveあり。両側統合は仮定で主催者定義要確認。totalのpulmonary_vein全体を割り当てない。"
+  - fine_id: 13
+    name: "Right subclavian artery"
+    weight: 3
+    category: a
+    source: z-anatomy
+    match:
+      fma_ids: ["FMA3953"]
+      name_patterns: ["Right\\ subclavian\\ artery"]
+    atlas_object_names: ["Right subclavian artery"]
+    ct_labels: ["subclavian_artery_right"]
+    notes: "既存Curveを変換。CTは患者変動の補助候補。"
+  - fine_id: 14
+    name: "Right vagal nerve"
+    weight: 3
+    category: a
+    source: z-anatomy
+    match:
+      fma_ids: []
+      name_patterns: ["Vagus\\ nerve\\ \\(X\\)\\.r"]
+    atlas_object_names: ["Vagus nerve (X).r"]
+    ct_labels: []
+    notes: "独立Curveとスプラインを確認。胸部の走行範囲・径・反回枝包含は要確認。脳幹のvagus nucleusは対象外。FMAは未検証につき空欄。"
+  - fine_id: 15
+    name: "Aorta"
+    weight: 2
+    category: b
+    source: totalsegmentator
+    match:
+      fma_ids: ["FMA3734"]
+      name_patterns: ["Ascending\\ aorta", "Aortic\\ arch", "Thoracic\\ aorta"]
+    atlas_object_names: ["Ascending aorta", "Aortic arch", "Thoracic aorta"]
+    ct_labels: ["aorta"]
+    notes: "胸部のみ使用する領域制約が必要。CT変形を周囲アトラス構造にも整合して適用。"
+  - fine_id: 16
+    name: "Azygos vein"
+    weight: 2
+    category: a
+    source: z-anatomy
+    match:
+      fma_ids: ["FMA4838"]
+      name_patterns: ["Azygos\\ vein"]
+    atlas_object_names: ["Azygos vein"]
+    ct_labels: []
+    notes: "独立Curveあり。半奇静脈・副半奇静脈を自動的に統合しない。"
+  - fine_id: 17
+    name: "Superior caval vein"
+    weight: 2
+    category: b
+    source: totalsegmentator
+    match:
+      fma_ids: ["FMA4720"]
+      name_patterns: ["Superior\\ vena\\ cava"]
+    atlas_object_names: ["Superior vena cava"]
+    ct_labels: ["superior_vena_cava"]
+    notes: "主催者表記を維持し上大静脈へ対応。腕頭静脈と下大静脈を除外。"
+  - fine_id: 18
+    name: "Lung"
+    weight: 1
+    category: b
+    source: totalsegmentator
+    match:
+      fma_ids: ["FMA7309", "FMA7310"]
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: ["lung_upper_lobe_left", "lung_lower_lobe_left", "lung_upper_lobe_right", "lung_middle_lobe_right", "lung_lower_lobe_right"]
+    notes: "CTの左右5肺葉を統合。虚脱・圧排を既存肺形状の変形で付与。肺全体FMAの子孫を無条件展開すると血管・気管支と衝突する。"
+  - fine_id: 19
+    name: "Lymph node"
+    weight: 3
+    category: a
+    source: z-anatomy
+    match:
+      fma_ids: []
+      name_patterns: ["Paratracheal\\ thoracic\\ nodes", "Inferior\\ tracheobronchial\\ nodes", "Superior\\ tracheobronchial\\ nodes", "Juxta\\-oesophageal\\ nodes", "Subaortic\\ nodes", "Node\\ of\\ arch\\ of\\ azygos\\ vein"]
+    atlas_object_names: ["Paratracheal thoracic nodes", "Inferior tracheobronchial nodes", "Superior tracheobronchial nodes", "Juxta-oesophageal nodes", "Subaortic nodes", "Node of arch of azygos vein"]
+    ct_labels: []
+    notes: "面を持つ縦隔リンパ節群あり。群内に複数節を含む。Task3のステーション領域とは別概念。FMAと14領域への帰属は未確認。"
+  - fine_id: 20
+    name: "Fatty tissue"
+    weight: 1
+    category: c
+    source: procedural
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "既存胸部表面・間隙に沿う脂肪被覆を生成加工。食道周囲脂肪との排他的な領域ルールを設定する。"
+  - fine_id: 21
+    name: "Left subclavian artery"
+    weight: 3
+    category: a
+    source: z-anatomy
+    match:
+      fma_ids: ["FMA4694"]
+      name_patterns: ["Left\\ subclavian\\ artery"]
+    atlas_object_names: ["Left subclavian artery"]
+    ct_labels: ["subclavian_artery_left"]
+    notes: "独立Curveあり。右鎖骨下動脈の鏡映で置換しない。"
+  - fine_id: 22
+    name: "Right bronchial artery"
+    weight: 3
+    category: d
+    source: unavailable
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "Z-Anatomy調査版で独立物体を未同定。BodyParts3DはFMA68109 bronchial arteryとFMA10704 variant bronchial arteryを収載するが右側同定未完了。汎用IDを右クラスに割り当てない。"
+  - fine_id: 23
+    name: "Pulmonary artery"
+    weight: 3
+    category: a
+    source: z-anatomy
+    match:
+      fma_ids: ["FMA8612", "FMA50872", "FMA50873"]
+      name_patterns: ["Pulmonary\\ trunk", "Bifurcation\\ of\\ pulmonary\\ trunk", "Right\\ pulmonary\\ artery", "Left\\ pulmonary\\ artery"]
+    atlas_object_names: ["Pulmonary trunk", "Bifurcation of pulmonary trunk", "Right pulmonary artery", "Left pulmonary artery"]
+    ct_labels: []
+    notes: "肺動脈幹は115面、左右枝はCurve。幹を含む範囲と遠位境界は要確認。bronchial arteryとは別系統。"
+  - fine_id: 24
+    name: "Pool of blood"
+    weight: 1
+    category: c
+    source: procedural
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "既存表面上に液体パッチを配置し材質・厚み・輪郭を乱数化。血管内血液や全赤色領域には付与しない。"
+  - fine_id: 25
+    name: "Resection area"
+    weight: 1
+    category: c
+    source: procedural
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "既存組織の切除・剥離操作から生じた領域に操作履歴由来のラベルを付ける。見た目の暗部から推定しない。"
+  - fine_id: 26
+    name: "Gastric conduit"
+    weight: 1
+    category: c
+    source: procedural
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "公開胃メッシュを切り出し・細径化・変形して胃管を作る。径・走行・再建段階は設定化し解剖学的妥当性を監修する。"
+  - fine_id: 27
+    name: "Right recurrent laryngeal nerve"
+    weight: 3
+    category: d
+    source: unavailable
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "調査版の独立Objectに反回神経を未同定。迷走神経Curve内の枝に含まれるかはBlenderで分枝・走行を確認。架空の神経線を生成しない。"
+  - fine_id: 28
+    name: "Left recurrent laryngeal nerve"
+    weight: 3
+    category: d
+    source: unavailable
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "調査版で独立Objectを未同定。左迷走神経内の枝を監修付きで分離できるか要確認。右神経の鏡映は禁止。"
+  - fine_id: 29
+    name: "Omentum"
+    weight: 1
+    category: c
+    source: procedural
+    match:
+      fma_ids: []
+      name_patterns: ["Greater\\ omentum", "Lesser\\ omentum"]
+    atlas_object_names: ["Greater omentum", "Lesser omentum"]
+    ct_labels: []
+    notes: "既存大網1212面・小網70面あり。不存在ではない。胃管付着大網など必要範囲を切り出して変形する。通常は大網候補で小網の採用は主催者定義要確認。"
+  - fine_id: 30
+    name: "Thoracic duct"
+    weight: 1
+    category: d
+    source: unavailable
+    match:
+      fma_ids: []
+      name_patterns: []
+    atlas_object_names: []
+    ct_labels: []
+    notes: "調査版で独立形状を未同定。別版の実体確認が必要。リンパ管一般や静脈を胸管へ代用しない。ユーザー指定の評価重みは1。"

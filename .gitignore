@@ -18,6 +18,12 @@ workspace/**
 !workspace/**/*.ini
 !workspace/**/*.md
 !workspace/**/*.ipynb
+# fold assignments are shared across all experiments — keep in git
+!workspace/fold/**/*.csv
+# expS01 (Astra 進捗共有): requirements / 調査 evidence / ガードレール .gitignore も共有
+!workspace/expS01_atlas_synth/**/*.txt
+!workspace/expS01_atlas_synth/assets/evidence/*.json
+!workspace/expS01_atlas_synth/.gitignore
 
 # ===== Generic experiment artifacts (top-level too) =====
 wandb/
@@ -41,6 +47,7 @@ tmp/
 
 # ===== Python env =====
 .venv/
+.venv-render/
 venv/
 env/
 __pycache__/

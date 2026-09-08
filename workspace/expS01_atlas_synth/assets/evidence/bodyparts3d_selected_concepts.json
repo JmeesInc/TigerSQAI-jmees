@@ -1,0 +1,203 @@
+{
+  "checked_on": "2026-09-08",
+  "license": "CC-BY-4.0",
+  "attribution": "BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International",
+  "sources": [
+    {
+      "url": "https://dbarchive.biosciencedbc.jp/data/bodyparts3d/LATEST/isa_parts_list_e.txt",
+      "sha256": "ab7796deedd49205e77f3609a1cb8c53e2bbee14ecb5c9a6ca05227469780513"
+    },
+    {
+      "url": "https://dbarchive.biosciencedbc.jp/data/bodyparts3d/LATEST/partof_parts_list_e.txt",
+      "sha256": "9224080557053e6f1322f1e13ab27f0ecde0db19bb3b505f0631afad230eeebd"
+    }
+  ],
+  "concepts": [
+    {
+      "tree": "isa",
+      "fma_id": "FMA3953",
+      "representation_id": "BP10281",
+      "name": "right subclavian artery"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA4694",
+      "representation_id": "BP10308",
+      "name": "left subclavian artery"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA4720",
+      "representation_id": "BP10292",
+      "name": "superior vena cava"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA4838",
+      "representation_id": "BP10369",
+      "name": "azygos vein"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA7131",
+      "representation_id": "BP9222",
+      "name": "esophagus"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA7394",
+      "representation_id": "BP7849",
+      "name": "trachea"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA7396",
+      "representation_id": "BP8386",
+      "name": "left main bronchus"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA8612",
+      "representation_id": "BP8690",
+      "name": "pulmonary trunk"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA10704",
+      "representation_id": "BP10559",
+      "name": "variant bronchial artery"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA49911",
+      "representation_id": "BP8784",
+      "name": "right inferior pulmonary vein"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA49913",
+      "representation_id": "BP8334",
+      "name": "left inferior pulmonary vein"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA50872",
+      "representation_id": "BP8968",
+      "name": "right pulmonary artery"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA50873",
+      "representation_id": "BP8463",
+      "name": "left pulmonary artery"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA68109",
+      "representation_id": "BP6095",
+      "name": "bronchial artery"
+    },
+    {
+      "tree": "isa",
+      "fma_id": "FMA68418",
+      "representation_id": "BP8732",
+      "name": "right main bronchus proper"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA3734",
+      "representation_id": "BP10374",
+      "name": "aorta"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA3953",
+      "representation_id": "BP9433",
+      "name": "right subclavian artery"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA4694",
+      "representation_id": "BP9324",
+      "name": "left subclavian artery"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA4720",
+      "representation_id": "BP10386",
+      "name": "superior vena cava"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA4838",
+      "representation_id": "BP10421",
+      "name": "azygos vein"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA7131",
+      "representation_id": "BP10206",
+      "name": "esophagus"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA7309",
+      "representation_id": "BP9359",
+      "name": "right lung"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA7310",
+      "representation_id": "BP9417",
+      "name": "left lung"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA7394",
+      "representation_id": "BP9373",
+      "name": "trachea"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA7396",
+      "representation_id": "BP9732",
+      "name": "left main bronchus"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA8612",
+      "representation_id": "BP9912",
+      "name": "pulmonary trunk"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA49911",
+      "representation_id": "BP9407",
+      "name": "right inferior pulmonary vein"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA49913",
+      "representation_id": "BP9712",
+      "name": "left inferior pulmonary vein"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA50872",
+      "representation_id": "BP9427",
+      "name": "right pulmonary artery"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA50873",
+      "representation_id": "BP9414",
+      "name": "left pulmonary artery"
+    },
+    {
+      "tree": "partof",
+      "fma_id": "FMA68418",
+      "representation_id": "BP9931",
+      "name": "right main bronchus proper"
+    }
+  ]
+}
