@@ -102,3 +102,36 @@
 - 7+8テスト通過、24枚監査通過。自己参照検索24/24 IoU=1→prior出力→別seed4枚の再描画・バンク化まで通過。別seed2枚の検索はIoU0.197/0.074で両方棄却。実登録精度は未検証。
 - 手順・失敗検出・バンク規模・CVリーク注意は `docs/task_bc_calibration_stage1.md`。差分は `render.calibration_report` で再現。
 - 次: Linuxでtrain-caseのみのIDマスクを使い2,048枚程度のバンクで採択率/coverage確認。実フレームのposes/summary等は共有しない。統計不一致の大きい構造・器具/血液の配置を調整。
+
+## 2026-09-09: B改訂/C Stage1 の Linux 検証 → 原因を2つに分解
+
+### 環境構築（再現性確保）
+- Z-Anatomy を GitHub raw URL から取得。**Startup.blend の SHA-256 が Astra の記録と完全一致**
+  (`9f08a17e...`) → 同一アセットで再現可能。`Z-Anatomy/` は scratchpad への symlink（git 管理外）
+- Blender 4.5.3 LTS を `/data4/src/shunsuke/opt/` に非 root 展開
+- **15 テスト全通過**（render 7 + registration 8）。CUDA 4並列で **5.5〜7.4 秒/枚**
+  → バンク 2048 枚 ≈ 3〜4h、8192 枚 ≈ 12〜16h
+- 実マスク `workspace/data_proc/labels_fine_1024/` は mode L / 1024x576 / ID 0..30 で
+  `registration.features.read_label` の要件を満たす（RGB 変換不要）
+
+### 診断（A/B 3本で切り分け）
+1. **心膜 proxy が IPV(12) を遮蔽【確定バグ】**: provisional 有効 → IPV 0.0% /
+   `--disable-provisional-structures` → 4.2%。心膜 proxy の source が心房を含み
+   margin 1.5mm の膨張和が肺静脈流入部を包む。IPV は実 58.3%/3.49% の主要クラス
+2. **カメラと剥離窓が結合していない【本命・構造的】**:
+   - `visible_class_count` フィルタ除去 → 数 pp しか動かず主犯ではない
+   - 剥離窓 0.45 倍 → 逆振り切れ（Pleura 面積 64.75% vs 実 16.44%、可視クラス数中央値 8 vs 15、
+     出現率絶対差 786pp → 850pp と悪化）
+   - **実データは「Pleura 面積 16.4%（大） かつ 可視クラス数 15（多） かつ 背景 18%」**
+     = 狭い露出窓を至近距離から覗く状態。窓サイズ 1 次元では到達不能
+   - → 注視点を剥離窓中心から選び、撮影距離を窓サイズに結合する必要がある
+
+### 成果物
+- `assets_local/astra_round3_findings_20260909.md` — 上記診断 + ラウンド3 プロンプト + 受入条件
+- 受入条件は **「出現率の絶対差 合計（31クラス）を 786pp から減らす」を主指標**とし、
+  Pleura 面積 / 可視クラス数中央値 / 背景中央値 の 3 つが同時に実側へ動くことを要求。128 枚で判定
+
+### 自己修正
+前ラウンドで指示した「剥離進行度を後期に寄せる」「可視クラス数 11〜18 フィルタ」は方向は
+正しかったが**単独では不十分**で、フィルタは上縦隔バイアスに寄与する副作用もあった。
+窓サイズ単独の調整では実データ分布に到達できないことが実測で判明した。
