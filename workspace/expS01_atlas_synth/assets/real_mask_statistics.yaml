@@ -1,0 +1,174 @@
+schema_version: 1
+source: User/Claude Code aggregate calibration pack 2026-09-08; no individual masks
+frames: 528
+background_id: 0
+visible_count_includes_background: false
+visible_count_definition_status: foreground assumed; confirm with producer
+visible_class_count:
+  p10: 11
+  median: 15
+  p90: 18
+background_summary:
+  mean_pct: 21.7
+  median_pct: 18.0
+  p90_pct: 41.5
+background_median_conflict: 'Resolved by user: unconditional median 18.0%; original
+  conditional table value 33.96% retained as disputed, excluded from comparison'
+classes:
+- fine_id: 0
+  name: Background
+  presence_pct: 97.5
+  mean_area_pct: 21.73
+  conditional_median_area_pct: 33.96
+- fine_id: 1
+  name: Instrument
+  presence_pct: 90.2
+  mean_area_pct: 5.47
+  conditional_median_area_pct: 5.62
+- fine_id: 2
+  name: Other
+  presence_pct: 75.8
+  mean_area_pct: 0.71
+  conditional_median_area_pct: 0.44
+- fine_id: 3
+  name: Trachea
+  presence_pct: 58
+  mean_area_pct: 2.97
+  conditional_median_area_pct: 3.72
+- fine_id: 4
+  name: Right main bronchus
+  presence_pct: 54.5
+  mean_area_pct: 2.16
+  conditional_median_area_pct: 2.93
+- fine_id: 5
+  name: Left main bronchus
+  presence_pct: 60.4
+  mean_area_pct: 2.14
+  conditional_median_area_pct: 2.62
+- fine_id: 6
+  name: Esophagus
+  presence_pct: 85.6
+  mean_area_pct: 7.6
+  conditional_median_area_pct: 7.02
+- fine_id: 7
+  name: Fatty tissue esophagus
+  presence_pct: 55.9
+  mean_area_pct: 2.95
+  conditional_median_area_pct: 4.03
+- fine_id: 8
+  name: Right inferior pulmonary ligament
+  presence_pct: 25.9
+  mean_area_pct: 0.54
+  conditional_median_area_pct: 1.47
+- fine_id: 9
+  name: Left inferior pulmonary ligament
+  presence_pct: 27.1
+  mean_area_pct: 0.23
+  conditional_median_area_pct: 0.73
+- fine_id: 10
+  name: Pleura
+  presence_pct: 93.2
+  mean_area_pct: 16.44
+  conditional_median_area_pct: 15.53
+- fine_id: 11
+  name: Pericardium
+  presence_pct: 70.8
+  mean_area_pct: 4.68
+  conditional_median_area_pct: 4.54
+- fine_id: 12
+  name: Inferior pulmonary vein
+  presence_pct: 58.3
+  mean_area_pct: 3.49
+  conditional_median_area_pct: 4.72
+- fine_id: 13
+  name: Right subclavian artery
+  presence_pct: 2.5
+  mean_area_pct: 0.06
+  conditional_median_area_pct: 1.86
+- fine_id: 14
+  name: Right vagal nerve
+  presence_pct: 40.7
+  mean_area_pct: 0.85
+  conditional_median_area_pct: 1.42
+- fine_id: 15
+  name: Aorta
+  presence_pct: 72.3
+  mean_area_pct: 4.31
+  conditional_median_area_pct: 4.37
+- fine_id: 16
+  name: Azygos vein
+  presence_pct: 69.5
+  mean_area_pct: 1.73
+  conditional_median_area_pct: 1.9
+- fine_id: 17
+  name: Superior caval vein
+  presence_pct: 11.6
+  mean_area_pct: 0.31
+  conditional_median_area_pct: 1.74
+- fine_id: 18
+  name: Lung
+  presence_pct: 71
+  mean_area_pct: 8.93
+  conditional_median_area_pct: 10.61
+- fine_id: 19
+  name: Lymph node
+  presence_pct: 65.3
+  mean_area_pct: 2.32
+  conditional_median_area_pct: 2.73
+- fine_id: 20
+  name: Fatty tissue
+  presence_pct: 84.1
+  mean_area_pct: 2.9
+  conditional_median_area_pct: 2.17
+- fine_id: 21
+  name: Left subclavian artery
+  presence_pct: 0.2
+  mean_area_pct: 0
+  conditional_median_area_pct: 2.15
+- fine_id: 22
+  name: Right bronchial artery
+  presence_pct: 0
+  mean_area_pct: 0
+  conditional_median_area_pct: null
+- fine_id: 23
+  name: Pulmonary artery
+  presence_pct: 7
+  mean_area_pct: 0.09
+  conditional_median_area_pct: 0.48
+- fine_id: 24
+  name: Pool of blood
+  presence_pct: 53.6
+  mean_area_pct: 1
+  conditional_median_area_pct: 1.28
+- fine_id: 25
+  name: Resection area
+  presence_pct: 80.9
+  mean_area_pct: 3.59
+  conditional_median_area_pct: 2.9
+- fine_id: 26
+  name: Gastric conduit
+  presence_pct: 9.5
+  mean_area_pct: 1.12
+  conditional_median_area_pct: 11.65
+- fine_id: 27
+  name: Right recurrent laryngeal nerve
+  presence_pct: 4
+  mean_area_pct: 0.02
+  conditional_median_area_pct: 0.32
+- fine_id: 28
+  name: Left recurrent laryngeal nerve
+  presence_pct: 15.3
+  mean_area_pct: 0.19
+  conditional_median_area_pct: 0.92
+- fine_id: 29
+  name: Omentum
+  presence_pct: 11.7
+  mean_area_pct: 1.35
+  conditional_median_area_pct: 9
+- fine_id: 30
+  name: Thoracic duct
+  presence_pct: 17.6
+  mean_area_pct: 0.11
+  conditional_median_area_pct: 0.34
+background_median_resolution: User confirmed summary median 18.0% on 2026-09-08. Treat
+  as unconditional; retain conflicting conditional table value without comparison.

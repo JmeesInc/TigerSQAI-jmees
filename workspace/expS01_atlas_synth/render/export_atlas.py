@@ -14,6 +14,9 @@ def main():
     depsgraph = bpy.context.evaluated_depsgraph_get()
     arrays, records, ribs = {}, [], {}
     names = [(int(k), n, 'anatomy') for k, values in cfg['objects'].items() for n in values]
+    proxy=cfg.get('provisional',{})
+    if proxy.get('enabled',False) and proxy['pericardium']['enabled']:
+        names += [(0,n,'proxy_source') for n in proxy['pericardium']['source_objects']]
     words = {3:'Third',4:'Fourth',5:'Fifth',6:'Sixth',7:'Seventh',8:'Eighth',9:'Ninth',10:'Tenth'}
     names += [(i, f'{word} rib.r', 'rib') for i, word in words.items()]
     for i, (fine_id, name, role) in enumerate(names):

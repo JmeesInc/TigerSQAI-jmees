@@ -11,7 +11,7 @@ device: CPU                    # CUDA / OPTIX / CPU; use --device CUDA on Linux
 samples: 1
 filter_size: 0.01
 clip_mm: [0.5, 500.0]
-max_attempts_per_frame: 320
+max_attempts_per_frame: 500
 render_timeout_seconds: 240
 ports:
   thorax_center_xy_mm: [0.0, 0.0]
@@ -55,10 +55,12 @@ distortion:
   overscan: 1.35
   inverse_iterations: 18
 quality:
-  main_class_ids: [3, 4, 5, 6, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23]
+  main_class_ids: [3, 4, 5, 6, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23]
   covered_phase_class_ids: [7, 10, 20]
   covered_phase_t_max: 0.20
   minimum_main_pixels: 40
   maximum_class_fraction: 0.95
   maximum_background_fraction: 0.85
   minimum_valid_optics_fraction: 0.98
+  # User aggregate p10..p90; foreground only, visible at >=1 pixel.
+  visible_class_count: {enabled: true, min: 11, max: 18, minimum_pixels: 1, includes_background: false}

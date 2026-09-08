@@ -1,8 +1,8 @@
 schema_version: 1
 reviewed_on: "2026-09-08"
 status: "provisional_requires_local_review"
-fine_id_policy: "user_list_order_1_to_30_not_verified_official_mask_values"
-background_id: null
+fine_id_policy: "confirmed_official_fine_id_1_to_30_by_user_2026_09_08"
+background_id: 0
 coarse_mapping: null
 station_nomenclature: "要確認"
 station_labels: ["6L", "6R", "7L", "7R", "8", "9", "10L", "10R", "11L", "11R", "12L", "12R", "13L", "13R"]
@@ -109,25 +109,27 @@ classes:
   - fine_id: 8
     name: "Right inferior pulmonary ligament"
     weight: 3
-    category: d
-    source: unavailable
+    category: c
+    source: procedural
     match:
       fma_ids: []
       name_patterns: []
     atlas_object_names: []
     ct_labels: []
-    notes: "調査版で独立形状を同定できず。胸膜からの分割には既存の根拠ある領域指定と解剖監修が必要。現時点で生成対象にしない。"
+    notes: "2026-09-09: 独立した肺靱帯形状は未同定。ユーザー指示で右下葉・右IPV・縦隔表面に拘束した二重胸膜ヒダproxyを実装。provisionalを記録し一括無効化可。解剖学的確定ラベルではない。"
+    provisional_proxy: {"implemented": true, "enable_key": "configs/atlas.yaml:provisional.enabled", "status": "provisional_anatomy_proxy", "method": "lower-lobe/IPV/mediastinal-surface constrained double pleural fold"}
   - fine_id: 9
     name: "Left inferior pulmonary ligament"
     weight: 3
-    category: d
-    source: unavailable
+    category: c
+    source: procedural
     match:
       fma_ids: []
       name_patterns: []
     atlas_object_names: []
     ct_labels: []
-    notes: "調査版で独立形状を同定できず。右を鏡映して代替しない。既存アトラスの部位指定または別公開アセットが必要。"
+    notes: "2026-09-09: 独立した肺靱帯形状は未同定。ユーザー指示で左下葉・左IPV・縦隔表面に拘束した二重胸膜ヒダproxyを実装。右の鏡映ではない。provisionalを記録し一括無効化可。"
+    provisional_proxy: {"implemented": true, "enable_key": "configs/atlas.yaml:provisional.enabled", "status": "provisional_anatomy_proxy", "method": "lower-lobe/IPV/mediastinal-surface constrained double pleural fold"}
   - fine_id: 10
     name: "Pleura"
     weight: 2
@@ -142,14 +144,15 @@ classes:
   - fine_id: 11
     name: "Pericardium"
     weight: 2
-    category: d
-    source: unavailable
+    category: c
+    source: procedural
     match:
       fma_ids: []
       name_patterns: []
     atlas_object_names: []
     ct_labels: []
-    notes: "Z-Anatomy調査版とBodyParts3D 4.0両索引で独立心膜を未同定。心臓やpericardial nodesは代用不可。TotalSegmentator trunk_cavitiesのpericardiumは形状意味・重み由来要確認。"
+    notes: "2026-09-09: 独立心膜は未同定。ユーザー指示で既存四心腔の充填膨張和の外表面proxyを実装。心膜反転部を再現せず、正式な心膜同定と区別する。provisionalを記録し一括無効化可。TotalSegmentator trunk_cavitiesは形状意味・重み由来要確認。"
+    provisional_proxy: {"implemented": true, "enable_key": "configs/atlas.yaml:provisional.enabled", "status": "provisional_anatomy_proxy", "method": "heart chamber surface union plus margin"}
   - fine_id: 12
     name: "Inferior pulmonary vein"
     weight: 2
@@ -270,7 +273,7 @@ classes:
       name_patterns: []
     atlas_object_names: []
     ct_labels: []
-    notes: "Z-Anatomy調査版で独立物体を未同定。BodyParts3DはFMA68109 bronchial arteryとFMA10704 variant bronchial arteryを収載するが右側同定未完了。汎用IDを右クラスに割り当てない。"
+    notes: "2026-09-08ユーザー確定: 実学習528枚で出現率0%、今回補充対象外。全評価データで不存在とは断定しない。 Z-Anatomy調査版で独立物体を未同定。BodyParts3DはFMA68109 bronchial arteryとFMA10704 variant bronchial arteryを収載するが右側同定未完了。汎用IDを右クラスに割り当てない。"
   - fine_id: 23
     name: "Pulmonary artery"
     weight: 3

@@ -43,4 +43,25 @@ landmarks_mm:
 right_lung_collapse:
   enabled: true
   lateral_pivot_mm: 120.0
-  scale: [0.35, 0.65, 0.85]
+  scale: [0.50, 0.75, 0.90]
+
+# User-authorized provisional geometry; disable as a group with the CLI flag.
+provisional:
+  enabled: true
+  pericardium:
+    enabled: true
+    source_objects:
+    - Left atrium
+    - Right atrium
+    - Left ventricle
+    - Right ventricle
+    voxel_mm: 2.0
+    margin_mm: 1.5
+    closing_iterations: 2
+  pulmonary_ligaments:
+    enabled: true
+    length_mm: 40.0
+    thickness_mm: 0.6
+    samples: 16
+    y_band_mm: 15.0
+    z_band_mm: 8.0

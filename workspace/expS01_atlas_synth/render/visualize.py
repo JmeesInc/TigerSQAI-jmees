@@ -20,6 +20,7 @@ def main():
     for i in range(1,31):palette[i]=np.array(colorsys.hsv_to_rgb((i*0.61803398875)%1,.65,.95))*255
     if args.palette:
         values=yaml.safe_load(args.palette.read_text())
+        values=values.get('palette',values)
         for i,color in values.items():palette[int(i)]=color
     names={0:'Background'}|{c['fine_id']:c['name'] for c in yaml.safe_load(Path(args.mapping).read_text())['classes']}
     files=[args.input] if args.input.is_file() else sorted((args.input/'label').glob('*.png'))[:args.limit]

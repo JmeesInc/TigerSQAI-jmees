@@ -1,5 +1,7 @@
 # Tier 0：内視鏡クラスIDレンダラ
 
+**2026-09-09改訂**：fine_idと背景0はユーザー確認済み。既定priorを後期剥離に変更し、可視クラス数11〜18、心膜・肺靱帯proxy、公式配色、集計差分、Stage 1登録を追加した。新しい実行・検証・限界は [B改訂/Cの説明](../docs/task_bc_calibration_stage1.md) を優先する。以下の初版ベンチマークは変更前の参考値。
+
 既存の公開Z-Anatomy形状を読み、**Blender CyclesのObject Index (`Object.pass_index`) とDepthパス**を直接取り出します。クラスIDはRGBや色管理を経由しません。生成対象はクラスID・深度・メタデータで、写実画像は生成しません。
 
 ## 最小実行
@@ -53,7 +55,7 @@ work/                   # 評価メッシュ・脂肪ボリューム・ワーカ
 raw/                    # --keep-rawを指定した場合の検証用多層EXR
 ```
 
-`fine_id` はユーザー指定のクラス順1〜30、0は背景です。実データの格納値との対応はタスクC等でローカル照合してください。`meta`には以下を保存します。
+`fine_id` は公式IDと一致するクラス順1〜30、0は背景です（ユーザーが2026-09-08に確認）。`meta`には以下を保存します。
 
 - 歪み適用後画像に対応するK、歪み係数、overscanレンダー用Kと解像度。
 - Blender座標系とCV座標系それぞれのcamera-to-world、CVのworld-to-camera。並進の単位はmm。
@@ -157,9 +159,9 @@ V(phi) = cos(theta) S + sin(theta) [cos(phi) U + sin(phi) W]
   --output outputs/tier0_1000/preview --limit 12
 ```
 
-QA配色は識別用の仮パレットです。公式labelmap配色は未提示なので断定していません。`--palette /path/to/local_palette.yaml` に `fine_id: [R,G,B]` を指定すれば、ユーザーのローカル配色に一致させられます。着色は教師PNGからの一方向処理です。
+`--palette assets/palette_fine_official.yaml` でユーザー提供の公式配色を使えます。省略時だけ識別用の仮パレットです。直接の `fine_id: [R,G,B]` と、`palette`キーで包んだ形式の両方を受け付けます。着色は教師PNGからの一方向処理です。
 
-固定した剥離段階を確認するには `--progress 0.05`、`0.25`、`0.42`、`0.65`、`0.95` 等を使います。患者ポートとseedは同じにできますが、棄却後のカメラが同一になるとは限りません。
+固定した剥離段階を確認するには `--progress` を使います。新しい既定のクラス数11〜18フィルタは切開前には適しません。早期フェーズのQAだけは別カメラ設定で `quality.visible_class_count.enabled: false` にしてください。患者ポートとseedは同じにできますが、棄却後のカメラが同一になるとは限りません。
 
 ## ライセンスと出典
 

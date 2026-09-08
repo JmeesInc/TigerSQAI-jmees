@@ -1,5 +1,5 @@
 schema_version: 1
-progress: {alpha: 1.4, beta: 1.4} # beta distribution; --progress fixes t for inspection
+progress: {alpha: 4.0, beta: 1.5, min: 0.50, max: 1.0} # beta distribution; --progress fixes t for inspection
 voxel_mm: 2.5
 max_grid_voxels: 20000000
 # All imported target structures except contextual lung are enveloped.
@@ -35,20 +35,23 @@ phases:
       - {anchor: aorta, interval: [0.92, 1.0], offset_mm: [0, 0, 0], radii_mm: [40, 35, 100]}
 resection:
   enabled: true
-  probability: 0.65
+  probability: 0.809
   # Thin islands on the remaining fat adjacent to removed regions, never on organ surfaces.
   rim_mm: 4.0
   noise_threshold: 0.2
 blood:
   enabled: true
-  probability: 0.35
+  probability: 0.536
   gravity_ras: [0, 1, 0] # prone illustrative direction; calibrate for semi-prone
   dependent_quantile: 0.85
   radius_mm: {mean: 4.0, sd: 1.0, min: 2.0, max: 6.0}
   depth_mm: 1.0
 instruments:
-  count: {values: [0, 1, 2], weights: [0.35, 0.45, 0.20]}
+  count: {values: [0, 1, 2], weights: [0.098, 0.602, 0.300]}
   shaft_radius_mm: 2.0
   jaw_length_mm: 8.0
   jaw_angle_deg: 18.0
   target_jitter_sd_mm: 6.0
+  # Target the working space in front of the anatomical focus.
+  target_depth_fraction: {mean: 0.65, sd: 0.12, min: 0.35, max: 0.90}
+  tip_standoff_mm: 8.0

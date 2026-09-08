@@ -37,6 +37,10 @@ def reject_reason(label,valid,config,progress):
     if valid.mean()<q['minimum_valid_optics_fraction']:return 'lens coverage'
     if counts.max()/label.size>=q['maximum_class_fraction']:return 'class dominance'
     if counts[0]/label.size>q['maximum_background_fraction']:return 'background dominance'
+    classes=q.get('visible_class_count',{})
+    if classes.get('enabled',False):
+        n=int(np.count_nonzero(counts[0 if classes.get('includes_background',False) else 1:]>=classes.get('minimum_pixels',1)))
+        if not classes['min']<=n<=classes['max']:return 'visible class count'
     major=q['main_class_ids'][:]
     if progress<=q['covered_phase_t_max']:major+=q['covered_phase_class_ids']
     if counts[major].sum()<q['minimum_main_pixels']:return 'no main structure'

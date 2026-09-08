@@ -1,0 +1,25 @@
+schema_version: 1
+resolution: [256, 144]
+# Capability intersection, NOT intersection of visible IDs in each pair.
+exclude_class_ids: [0, 1, 2, 22, 24, 25, 26, 27, 28, 29, 30]
+allow_provisional_class_ids: [8, 9, 11]
+minimum_pixels: 1
+aspect_ratio_tolerance: 0.02
+knn_k: 64
+output_top_k: 10
+weights: {presence: 1.0, area: 1.0, centroid: 0.5, moment: 0.25, adjacency: 0.5}
+confidence:
+  minimum_weighted_iou: 0.30
+  maximum_descriptor_distance: 0.65
+  minimum_comparable_classes: 5
+  minimum_comparable_pixel_fraction: 0.20
+  minimum_confidence: 0.20
+  ambiguity_iou_tolerance: 0.025
+  maximum_ambiguous_translation_mm: 25.0
+  maximum_ambiguous_angle_deg: 25.0
+prior_fit:
+  minimum_accepted_frames: 20
+  minimum_unique_bank_poses: 8
+  shrinkage_pseudocount: 10.0
+  minimum_sd_fraction_of_original: 0.50
+  maximum_single_pose_fraction: 0.25

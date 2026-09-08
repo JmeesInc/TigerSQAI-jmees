@@ -12,7 +12,7 @@ import time
 import numpy as np
 import trimesh
 import yaml
-from .camera import RejectPose,sample_ports,sample_camera,distortion_grid,choice,unit
+from .camera import RejectPose,sample_ports,sample_camera,distortion_grid,choice,unit,normal
 from .volume import build_volume,dissect
 from .util import sha256,save_meshes,atomic_json
 from .output import read_passes,remap,reject_reason,write_outputs
@@ -45,6 +45,11 @@ def validate(camera,dissection,atlas):
     ids={int(k) for k in atlas['objects']}
     if not ids<=set(range(1,31)):raise ValueError('Invalid fine IDs')
     if atlas['context_class_id'] not in [0,2]:raise ValueError('Context ribs require explicit background/Other convention')
+    progress=dissection['progress']
+    if progress['alpha']<=0 or progress['beta']<=0 or not 0<=progress.get('min',0)<progress.get('max',1)<=1:
+        raise ValueError('Invalid truncated Beta progress prior')
+    for name in ['resection','blood']:
+        if not 0<=dissection[name]['probability']<=1:raise ValueError('Invalid generation probability')
 
 
 def prepare(args,camera,dissection,atlas,output):
@@ -94,6 +99,8 @@ def prepare(args,camera,dissection,atlas,output):
         centers=o['v'][o['f']].mean(axis=1)
         o['f']=o['f'][np.all((centers>=lo)&(centers<=hi),axis=1)]
     objects=[o for o in objects if len(o['f'])]
+    from .provisional import add_proxies
+    objects,proxy_records=add_proxies(objects,atlas)
     # Validate every declared class retains at least one surface after ROI clipping.
     missing={int(k) for k in atlas['objects']}-{o['fine_id'] for o in objects}
     if missing:raise ValueError(f'ROI discarded declared classes: {missing}')
@@ -116,6 +123,7 @@ def prepare(args,camera,dissection,atlas,output):
                 'atlas_attribution':atlas['attribution'],'manifest_status':atlas['status'],
                 'registration':registration,'patient_manifest':patient,'ports':ports,
                 'landmarks_mm':landmarks,'right_lung_collapse':collapse,
+                'provisional_structures':proxy_records,
                 'unavailable_class_ids':sorted(set(atlas['unavailable_class_ids'])-{o['fine_id'] for o in objects}),
                 'config_sha256':hashlib.sha256(json.dumps([camera,dissection,atlas],sort_keys=True).encode()).hexdigest()}
     atomic_json(output/'provenance.json',provenance)
@@ -129,9 +137,10 @@ def instruments(rng,ports,camera,cfg):
     result=[]
     for i in allowed[:count]:
         port=np.array(ports[i]['position_mm'])
-        target=np.array(camera['target_mm'])+rng.normal(0,cfg['target_jitter_sd_mm'],3)
+        fraction=normal(rng,cfg.get('target_depth_fraction',{'mean':.65,'sd':.12,'min':.35,'max':.9}))
+        target=np.array(camera['tip_mm'])+np.array(camera['optical_axis_ras'])*camera['working_distance_mm']*fraction+rng.normal(0,cfg['target_jitter_sd_mm'],3)
         # Stop short of the anatomical focus; collision validation follows in Blender.
-        tip=target-unit(target-port)*12.
+        tip=target-unit(target-port)*cfg.get('tip_standoff_mm',8.)
         shaft=trimesh.creation.cylinder(radius=cfg['shaft_radius_mm'],segment=[port,tip],sections=10)
         axis=unit(tip-port);side=unit(np.cross(axis,[0.,0.,1.]))
         meshes=[shaft]
@@ -156,7 +165,14 @@ def worker_loop(worker_id,frame_indices,args,camera,dissection,volume,landmarks,
                 start=time.perf_counter()
                 frame_id=f'{number:08d}'
                 rng_t=np.random.default_rng(np.random.SeedSequence([camera['seed'],number,838]))
-                t=float(args.progress if args.progress is not None else rng_t.beta(dissection['progress']['alpha'],dissection['progress']['beta']))
+                prior=dissection['progress']
+                t=args.progress
+                if t is None:
+                    for _ in range(10000):
+                        t=float(rng_t.beta(prior['alpha'],prior['beta']))
+                        if prior.get('min',0)<=t<=prior.get('max',1):break
+                    else:raise ValueError('Progress prior has negligible probability in configured interval')
+                t=float(t)
                 # Patient noise is fixed; t controls a cumulative surgical window sequence.
                 extra,dissection_meta=dissect(volume,landmarks,dissection,t,rng_t)
                 rejections=Counter();done=False
@@ -201,6 +217,7 @@ def worker_loop(worker_id,frame_indices,args,camera,dissection,volume,landmarks,
                           'meaning':'linear camera axial Z from Cycles Depth.Z','invalid_value':0.,
                           'distorted':bool(camera['distortion']['enabled']),'interpolation':'nearest'},'label_encoding':'PNG uint8 grayscale; Object Index pass',
                           'missing_anatomy_class_ids':provenance['unavailable_class_ids'],
+                          'provisional_structures':provenance['provisional_structures'],
                           'provenance_sha256':sha256(output/'provenance.json'),'config_sha256':provenance['config_sha256'],
                           'geometry/render':result,'rejection_counts':dict(rejections),'frame_wall_seconds':elapsed,
                           'valid_optics_fraction':float(grid[2].mean()),'instrument_count':sum(o['fine_id']==1 for o in items),
@@ -230,11 +247,13 @@ def main():
     p.add_argument('--seed',type=int);p.add_argument('--resolution',nargs=2,type=int);p.add_argument('--progress',type=float)
     p.add_argument('--patient',help='Optional reviewed public CT masks + paired-landmark YAML')
     p.add_argument('--allow-provisional',action='store_true');p.add_argument('--keep-raw',action='store_true')
+    p.add_argument('--disable-provisional-structures',action='store_true',help='Disable all added anatomy proxies, independent of atlas identity status')
     p.add_argument('--startup-timeout',type=float,default=240)
     args=p.parse_args()
     if args.frames<1 or args.workers<1:p.error('frames and workers must be positive')
     if args.progress is not None and not 0<=args.progress<=1:p.error('progress must be in [0,1]')
     camera=load_yaml(args.camera_prior);dissection=load_yaml(args.dissection);atlas=load_yaml(args.atlas_config)
+    if args.disable_provisional_structures:atlas.setdefault('provisional',{})['enabled']=False
     if args.device:camera['device']=args.device
     if args.seed is not None:camera['seed']=args.seed
     if args.resolution:camera['resolution']=args.resolution
