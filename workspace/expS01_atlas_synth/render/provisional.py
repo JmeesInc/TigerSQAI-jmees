@@ -5,7 +5,7 @@ from scipy import ndimage as ndi
 from .volume import mesh_from_mask
 
 
-def heart_surface(sources,cfg):
+def heart_surface(sources,cfg,exclusions=()):
     pitch=cfg['voxel_mm']
     points=[]
     for o in sources:
@@ -20,6 +20,16 @@ def heart_surface(sources,cfg):
     solid=ndi.binary_closing(solid,iterations=cfg['closing_iterations']) if cfg['closing_iterations'] else solid
     solid=ndi.binary_fill_holes(solid)
     solid=ndi.distance_transform_edt(~solid,sampling=pitch)<=cfg['margin_mm']
+    # Exclude a clearance volume around the original IPV meshes AFTER dilation.
+    # Subtracting before closing/dilation would simply fill the venous ostia again.
+    protected=np.zeros(shape,bool)
+    for obj in exclusions:
+        vox=trimesh.Trimesh(obj['v'],obj['f'],process=True).voxelized(pitch).fill()
+        indices=np.rint((vox.points-origin)/pitch).astype(int)
+        indices=indices[np.all((indices>=0)&(indices<shape),axis=1)]
+        protected[tuple(indices.T)]=True
+    if protected.any():
+        solid &= ndi.distance_transform_edt(~protected,sampling=pitch)>cfg.get('ipv_clearance_mm',4.)
     return mesh_from_mask(solid,origin,pitch)
 
 
@@ -62,7 +72,8 @@ def add_proxies(objects,atlas):
     if not cfg.get('enabled',False):return objects,records
     if cfg['pericardium']['enabled']:
         if {o['name'] for o in sources}!=set(cfg['pericardium']['source_objects']):raise ValueError('Missing verified existing heart source meshes')
-        v,f=heart_surface(sources,cfg['pericardium']);add(11,'provisional_pericardium',v,f,[o['name'] for o in sources],'Filled union of four heart chamber surfaces plus configured dilation; not true pericardial reflections')
+        exclusions=[o for o in objects if o['fine_id']==12] if cfg['pericardium'].get('subtract_ipv',True) else []
+        v,f=heart_surface(sources,cfg['pericardium'],exclusions);add(11,'provisional_pericardium',v,f,[o['name'] for o in sources]+[o['name'] for o in exclusions],'Heart union plus dilation, then original IPV clearance subtraction; provisional, not true pericardial reflections')
     if cfg['pulmonary_ligaments']['enabled']:
         for side,cid,word in [(1,8,'right'),(-1,9,'left')]:
             # CT replacement may merge lungs/veins: exact lobe geometry required here.

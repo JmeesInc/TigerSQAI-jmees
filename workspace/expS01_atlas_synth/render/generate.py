@@ -15,7 +15,7 @@ import yaml
 from .camera import RejectPose,sample_ports,sample_camera,distortion_grid,choice,unit,normal
 from .volume import build_volume,dissect
 from .util import sha256,save_meshes,atomic_json
-from .output import read_passes,remap,reject_reason,write_outputs
+from .output import read_passes,remap,reject_reason,write_outputs,class_count_probability
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -50,6 +50,12 @@ def validate(camera,dissection,atlas):
         raise ValueError('Invalid truncated Beta progress prior')
     for name in ['resection','blood']:
         if not 0<=dissection[name]['probability']<=1:raise ValueError('Invalid generation probability')
+    coupling=camera.get('window_coupling',{})
+    if coupling.get('enabled',False):
+        if not 0<=coupling['center_target_probability']<=1:raise ValueError('Invalid window targeting probability')
+        if coupling['short_side_occupancy']['min']<=0:raise ValueError('Window occupancy must be positive')
+    soft=camera['quality'].get('visible_class_count',{}).get('soft_preference')
+    if soft is not None and soft['sd']<=0:raise ValueError('Class-count soft preference sd must be positive')
 
 
 def prepare(args,camera,dissection,atlas,output):
@@ -114,7 +120,10 @@ def prepare(args,camera,dissection,atlas,output):
     for _ in range(camera['ports']['max_layout_attempts']):
         ports=sample_ports(rng,ribs,camera)
         positions=np.array([p['position_mm'] for p in ports])
-        targets=np.array([landmarks[n] for n in camera['targets']['names']])
+        names=set(camera['targets']['names'])
+        if camera.get('window_coupling',{}).get('enabled',False):
+            names.update(n for n,w in camera['window_coupling']['anchor_weights'].items() if w>0)
+        targets=np.array([landmarks[n] for n in sorted(names)])
         distances=np.linalg.norm(positions[:,None]-targets[None],axis=2)
         low,high=camera['ports']['port_to_target_mm']
         if np.all(np.any((distances>=low)&(distances<=high),axis=0)):break
@@ -175,11 +184,13 @@ def worker_loop(worker_id,frame_indices,args,camera,dissection,volume,landmarks,
                 t=float(t)
                 # Patient noise is fixed; t controls a cumulative surgical window sequence.
                 extra,dissection_meta=dissect(volume,landmarks,dissection,t,rng_t)
+                from .window_camera import context
+                window_context=context(volume,landmarks,dissection,t,ports,camera['window_coupling']) if camera.get('window_coupling',{}).get('enabled',False) else None
                 rejections=Counter();done=False
                 for attempt in range(camera['max_attempts_per_frame']):
                     rng=np.random.default_rng(np.random.SeedSequence([camera['seed'],number,attempt]))
                     try:
-                        pose=sample_camera(rng,ports,landmarks,camera)
+                        pose=sample_camera(rng,ports,landmarks,camera,window_context)
                         grid=distortion_grid(rng,pose,camera)
                     except RejectPose as error:
                         rejections[str(error)]+=1;continue
@@ -205,6 +216,9 @@ def worker_loop(worker_id,frame_indices,args,camera,dissection,volume,landmarks,
                     reason=reject_reason(label,grid[2],camera,t)
                     if reason:
                         rejections[reason]+=1;continue
+                    count_probability=class_count_probability(label,camera)
+                    if rng.random()>count_probability:
+                        rejections['soft class-count prior']+=1;continue
                     write_outputs(output,frame_id,label,axial)
                     counts=np.bincount(label.ravel(),minlength=31)
                     elapsed=time.perf_counter()-start
@@ -218,6 +232,7 @@ def worker_loop(worker_id,frame_indices,args,camera,dissection,volume,landmarks,
                           'distorted':bool(camera['distortion']['enabled']),'interpolation':'nearest'},'label_encoding':'PNG uint8 grayscale; Object Index pass',
                           'missing_anatomy_class_ids':provenance['unavailable_class_ids'],
                           'provisional_structures':provenance['provisional_structures'],
+                          'class_count_acceptance_probability':count_probability,
                           'provenance_sha256':sha256(output/'provenance.json'),'config_sha256':provenance['config_sha256'],
                           'geometry/render':result,'rejection_counts':dict(rejections),'frame_wall_seconds':elapsed,
                           'valid_optics_fraction':float(grid[2].mean()),'instrument_count':sum(o['fine_id']==1 for o in items),

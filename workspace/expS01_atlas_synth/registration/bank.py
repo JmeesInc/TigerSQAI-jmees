@@ -8,7 +8,9 @@ from .features import describe,read_label
 from render.util import atomic_json,sha256
 
 
-def build(batches,output,cfg):
+def build(batches,output,cfg,calibration_report=None):
+    from .calibration_gate import require_report
+    gate=require_report(calibration_report)
     if output.exists() and any(output.iterdir()):raise ValueError('Bank output must be empty')
     output.mkdir(parents=True,exist_ok=True);(output/'labels').mkdir()
     descriptors=[];records=[];supported=None;provisional=set();provenances=[];scene_signatures=set()
@@ -19,6 +21,7 @@ def build(batches,output,cfg):
         prov={int(r['fine_id']) for r in provenance.get('provisional_structures',[])};provisional|=prov
         cap-=prov-set(cfg['allow_provisional_class_ids']);supported=cap if supported is None else supported&cap
         resolved=json.loads((batch/'resolved_configs.json').read_text())
+        require_report(calibration_report,resolved)
         atlas=resolved['atlas'];scene_signatures.add(json.dumps([provenance['atlas_sha256'],provenance['registration'],atlas.get('roi_mm'),atlas.get('right_lung_collapse'),atlas.get('provisional')],sort_keys=True))
         files=sorted((batch/'label').glob('*.png'))
         if (batch/'metrics.json').exists():
@@ -43,12 +46,14 @@ def build(batches,output,cfg):
               'pose_bounds':{key:[float(min(p[key] for p in cameras)),float(max(p[key] for p in cameras))] for key in ['sensor_roll_deg','working_distance_mm','horizontal_fov_deg']},
               'warning':'Bank coverage is empirical, not proof of anatomical identifiability. Unseen-capable classes remain penalized; expand bank or explicitly revise exclusion config.'}
     atomic_json(output/'coverage.json',coverage)
+    if any(presence[i]==0 for i in gate['required_bank_class_ids']):
+        raise ValueError('Actual bank still lacks required IDs 12/8/9; inspect coverage.json; refusing to publish its manifest')
     atomic_json(output/'manifest.json',{'schema_version':1,'resolution':cfg['resolution'],'config':cfg,'eligible_class_ids':ids,'provisional_class_ids':sorted(provisional),'records':records,'provenances':provenances,'descriptor_version':1})
     print(f'{len(records)} bank frames; eligible IDs {ids}')
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('batches',nargs='+',type=Path);p.add_argument('--output',type=Path,required=True);p.add_argument('--config',type=Path,default=Path('configs/registration.yaml'));a=p.parse_args();build(a.batches,a.output,yaml.safe_load(a.config.read_text()))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('batches',nargs='+',type=Path);p.add_argument('--output',type=Path,required=True);p.add_argument('--config',type=Path,default=Path('configs/registration.yaml'));p.add_argument('--calibration-report',type=Path,required=True);a=p.parse_args();build(a.batches,a.output,yaml.safe_load(a.config.read_text()),a.calibration_report)
 
 
 if __name__=='__main__':main()

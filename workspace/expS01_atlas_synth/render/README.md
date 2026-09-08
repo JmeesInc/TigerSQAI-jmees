@@ -1,5 +1,7 @@
 # Tier 0：内視鏡クラスIDレンダラ
 
+Round 3: [窓とカメラの結合・IPV保護・128枚受入条件](../docs/round3_20260909.md)。バンク生成は受入ゲート通過まで停止。
+
 **2026-09-09改訂**：fine_idと背景0はユーザー確認済み。既定priorを後期剥離に変更し、可視クラス数11〜18、心膜・肺靱帯proxy、公式配色、集計差分、Stage 1登録を追加した。新しい実行・検証・限界は [B改訂/Cの説明](../docs/task_bc_calibration_stage1.md) を優先する。以下の初版ベンチマークは変更前の参考値。
 
 既存の公開Z-Anatomy形状を読み、**Blender CyclesのObject Index (`Object.pass_index`) とDepthパス**を直接取り出します。クラスIDはRGBや色管理を経由しません。生成対象はクラスID・深度・メタデータで、写実画像は生成しません。

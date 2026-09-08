@@ -38,6 +38,14 @@ def fit(results,camera,dissection,cfg):
     log=np.log([p['working_distance_mm'] for p in poses]);spec=c['scope']['working_distance_mm'];normal={'mean':spec['log_mean'],'sd':spec['log_sd'],'min':np.log(spec['min']),'max':np.log(spec['max'])};new=regularized_normal(normal,log,strength,floor);spec.update(log_mean=new['mean'],log_sd=new['sd'])
     c['scope']['oblique_angle_deg']=categorical(c['scope']['oblique_angle_deg'],[p['oblique_angle_deg'] for p in poses],strength)
     names=c['targets']['names'];target=categorical({'values':names,'weights':c['targets']['weights']},[p['target_name'] for p in poses],strength);c['targets']['weights']=target['weights']
+    coupled=[p for p in poses if p.get('window_coupling')]
+    if coupled and c.get('window_coupling',{}).get('enabled',False):
+        wc=c['window_coupling']
+        wc['short_side_occupancy']=regularized_normal(wc['short_side_occupancy'],[p['window_coupling']['requested_short_side_occupancy'] for p in coupled],strength,floor)
+        wc['center_target_probability']=float((sum(p['target_name'].startswith('window:') for p in coupled)+strength*wc['center_target_probability'])/(len(coupled)+strength))
+        anchors=list(wc['anchor_weights'])
+        weights=categorical({'values':anchors,'weights':[wc['anchor_weights'][a] for a in anchors]},[p['window_coupling']['window']['anchor'] for p in coupled],strength)
+        wc['anchor_weights']=dict(zip(anchors,weights['weights']))
     # Derive the inverse-sampler meridian angle, distinct from actual shaft axial rotation.
     azimuth=[]
     for p in poses:

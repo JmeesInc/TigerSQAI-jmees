@@ -33,7 +33,8 @@ def main():
         labels=np.array(image)
         if labels.max()>30:raise ValueError('Label out of range')
         out=Image.fromarray(palette[labels]);out.save(args.output/(path.stem+'_color.png'))
-        thumb=out.copy();thumb.thumbnail((512,288),Image.Resampling.NEAREST)
+        scale=min(512/out.width,288/out.height)
+        thumb=out.resize((round(out.width*scale),round(out.height*scale)),Image.Resampling.NEAREST)
         tile=Image.new('RGB',(512,320));tile.paste(thumb,(0,24))
         ImageDraw.Draw(tile).text((6,4),path.stem,fill='white');previews.append(tile)
     columns=min(3,len(previews));rows=(len(previews)+columns-1)//columns

@@ -1,0 +1,8 @@
+schema_version: 1
+minimum_frames: 128
+baseline:
+  presence_absolute_error_sum_pp: 786.0
+  pleura_mean_area_pct: 8.0
+  visible_class_count_median: 14.0
+  background_median_pct: 6.7
+required_bank_class_ids: [12, 8, 9]

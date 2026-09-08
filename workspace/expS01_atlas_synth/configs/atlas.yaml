@@ -57,6 +57,8 @@ provisional:
     - Right ventricle
     voxel_mm: 2.0
     margin_mm: 1.5
+    subtract_ipv: true
+    ipv_clearance_mm: 4.0
     closing_iterations: 2
   pulmonary_ligaments:
     enabled: true

@@ -1,0 +1,205 @@
+# Geometry-only ablation; did not pass all four criteria in the Mac 128-frame test.
+schema_version: 1
+resolution:
+- 1024
+- 576
+seed: 20260908
+intrinsics:
+  focal_x_px: null
+  fy_over_fx:
+    mean: 1.0
+    sd: 0.0
+    min: 0.8
+    max: 1.2
+  principal_x_offset_fraction:
+    mean: 0.0
+    sd: 0.0
+    min: -0.1
+    max: 0.1
+  principal_y_offset_fraction:
+    mean: 0.0
+    sd: 0.0
+    min: -0.1
+    max: 0.1
+patient_id: atlas_001
+device: CPU
+samples: 1
+filter_size: 0.01
+clip_mm:
+- 0.5
+- 500.0
+max_attempts_per_frame: 5000
+render_timeout_seconds: 240
+ports:
+  thorax_center_xy_mm:
+  - 0.0
+  - 0.0
+  count:
+    values:
+    - 3
+    - 4
+    weights:
+    - 0.65
+    - 0.35
+  interspaces:
+    values:
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    weights:
+    - 0.04
+    - 0.1
+    - 0.22
+    - 0.25
+    - 0.22
+    - 0.12
+    - 0.05
+  azimuth_deg:
+    mean: -25.0
+    sd: 14.0
+    min: -55.0
+    max: 0.0
+  interspace_fraction:
+    mean: 0.5
+    sd: 0.1
+    min: 0.25
+    max: 0.75
+  minimum_spacing_mm: 25.0
+  max_layout_attempts: 1000
+  scope_port_height_sd_mm: 55.0
+  minimum_right_offset_mm: 15.0
+  rib_surface_neighbors: 16
+  samples_per_layout: 300
+  port_to_target_mm:
+  - 20.0
+  - 120.0
+scope:
+  sensor_width_mm: 36.0
+  oblique_angle_deg:
+    values:
+    - 0
+    - 30
+    weights:
+    - 0.2
+    - 0.8
+  shaft_azimuth_rad:
+    mean: 0.0
+    kappa: 1.5
+  working_distance_mm:
+    log_mean: 3.65
+    log_sd: 0.4
+    min: 20.0
+    max: 120.0
+  insertion_mm:
+  - 5.0
+  - 180.0
+  shaft_radius_mm: 2.5
+  roll_deg:
+    mean: 0.0
+    sd: 12.0
+    min: -30.0
+    max: 30.0
+  horizontal_fov_deg:
+    mean: 77.0
+    sd: 3.0
+    min: 70.0
+    max: 85.0
+  minimum_medial_component: 0.05
+  tip_clearance_mm: 2.0
+  enforce_shaft_collision: true
+  shaft_clearance_step_mm: 2.0
+  enforce_target_line_of_sight: false
+targets:
+  names:
+  - esophagus
+  - carina
+  - azygos
+  - aorta
+  - bronchus
+  - upper
+  weights:
+  - 0.3
+  - 0.2
+  - 0.18
+  - 0.08
+  - 0.12
+  - 0.12
+  jitter_sd_mm:
+  - 5.0
+  - 5.0
+  - 10.0
+  jitter_limit_sd: 2.5
+distortion:
+  enabled: true
+  k1:
+    mean: -0.065
+    sd: 0.015
+    min: -0.1
+    max: -0.02
+  k2:
+    mean: 0.008
+    sd: 0.003
+    min: 0.002
+    max: 0.015
+  overscan: 1.35
+  inverse_iterations: 18
+quality:
+  main_class_ids:
+  - 3
+  - 4
+  - 5
+  - 6
+  - 8
+  - 9
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 21
+  - 23
+  covered_phase_class_ids:
+  - 7
+  - 10
+  - 20
+  covered_phase_t_max: 0.2
+  minimum_main_pixels: 40
+  maximum_class_fraction: 0.95
+  maximum_background_fraction: 0.85
+  minimum_valid_optics_fraction: 0.98
+  visible_class_count:
+    enabled: true
+    min: 11
+    max: 18
+    minimum_pixels: 1
+    includes_background: false
+    soft_preference: null
+window_coupling:
+  enabled: true
+  center_target_probability: 0.85
+  short_side_occupancy:
+    mean: 0.65
+    sd: 0.08
+    min: 0.5
+    max: 0.8
+  jitter_sd_mm: 5.0
+  maximum_jitter_radius_fraction: 0.25
+  anchor_weights:
+    inferior: 0.25
+    esophagus: 0.3
+    bronchus: 0.15
+    azygos: 0.1
+    upper: 0.1
+    aorta: 0.1
+  minimum_facing_cosine: 0.5
+  patch_spacing_mm: 8.0
+  maximum_patches_per_window_port: 12
+  center_preference_strength: 2.0

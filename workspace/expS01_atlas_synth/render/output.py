@@ -47,6 +47,23 @@ def reject_reason(label,valid,config,progress):
     return None
 
 
+def class_count_probability(label,config):
+    """Optional soft population prior within the hard class-count band."""
+    q=config['quality'].get('visible_class_count',{})
+    prior=q.get('soft_preference')
+    if not q.get('enabled',False) or prior is None:return 1.
+    counts=np.bincount(label.ravel(),minlength=31)
+    n=np.count_nonzero(counts[0 if q.get('includes_background',False) else 1:]>=q.get('minimum_pixels',1))
+    if prior.get('proposal_counts'):
+        support=np.arange(q['min'],q['max']+1)
+        proposal=np.array([prior['proposal_counts'].get(int(k),prior['proposal_counts'].get(str(k),0)) for k in support],float)
+        if np.any(proposal<=0):raise ValueError('Soft prior needs positive pilot counts for the complete hard-band support')
+        weight=np.exp(-.5*((support-prior['mean'])/prior['sd'])**2)/proposal
+        probability=weight/weight.max()
+        return float(probability[n-q['min']]) if q['min']<=n<=q['max'] else 0.
+    return float(np.exp(-.5*((n-prior['mean'])/prior['sd'])**2))
+
+
 def write_outputs(output,frame_id,label,depth):
     output=Path(output)
     # PIL mode L is 8-bit grayscale, not palette RGB.

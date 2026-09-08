@@ -30,6 +30,10 @@ def audit(output):
         np.testing.assert_allclose(np.array(c['port_mm'])+c['insertion_mm']*s,c['tip_mm'],atol=1e-5)
         np.testing.assert_allclose(np.array(c['tip_mm'])+c['working_distance_mm']*v,c['target_mm'],atol=1e-5)
         np.testing.assert_allclose(np.array(c['world_to_camera_cv_mm'])@np.array(c['camera_to_world_cv_mm']),np.eye(4),atol=1e-6)
+        if c.get('window_coupling'):
+            coupled=c['window_coupling'];w,h=meta['resolution']
+            occupancy=2*coupled['window']['effective_radius_mm']/(c['working_distance_mm']*min(w/c['K'][0][0],h/c['K'][1][1]))
+            np.testing.assert_allclose(occupancy,coupled['requested_short_side_occupancy'],atol=1e-6)
         assert meta['visible_stations'] is None and meta['station_nomenclature']=='要確認'
         union.update(meta['visible_class_ids']);phase=meta['dissection']['phase']
         stages[phase]=stages.get(phase,0)+1;instrument_counts.add(meta['instrument_count'])

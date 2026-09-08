@@ -11,7 +11,7 @@ device: CPU                    # CUDA / OPTIX / CPU; use --device CUDA on Linux
 samples: 1
 filter_size: 0.01
 clip_mm: [0.5, 500.0]
-max_attempts_per_frame: 500
+max_attempts_per_frame: 5000
 render_timeout_seconds: 240
 ports:
   thorax_center_xy_mm: [0.0, 0.0]
@@ -63,4 +63,25 @@ quality:
   maximum_background_fraction: 0.85
   minimum_valid_optics_fraction: 0.98
   # User aggregate p10..p90; foreground only, visible at >=1 pixel.
-  visible_class_count: {enabled: true, min: 11, max: 18, minimum_pixels: 1, includes_background: false}
+  visible_class_count:
+    enabled: true
+    min: 11
+    max: 18
+    minimum_pixels: 1
+    includes_background: false
+    soft_preference:
+      mean: 15.0
+      sd: 2.0
+      # Public-atlas pilot, 128 accepted frames; this is NOT real-mask data.
+      proposal_counts: {11: 16, 12: 13, 13: 8, 14: 9, 15: 13, 16: 27, 17: 20, 18: 22}
+window_coupling:
+  enabled: true
+  center_target_probability: 0.85
+  short_side_occupancy: {mean: 0.65, sd: 0.08, min: 0.50, max: 0.80}
+  jitter_sd_mm: 5.0
+  maximum_jitter_radius_fraction: 0.25
+  anchor_weights: {inferior: 0.25, esophagus: 0.30, bronchus: 0.15, azygos: 0.10, upper: 0.10, aorta: 0.10}
+  minimum_facing_cosine: 0.5
+  patch_spacing_mm: 8.0
+  maximum_patches_per_window_port: 12
+  center_preference_strength: 2.0

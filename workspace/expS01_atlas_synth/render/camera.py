@@ -101,19 +101,46 @@ def sample_ports(rng, ribs, config):
     raise ValueError("Cannot sample separated right intercostal ports; check atlas coordinates")
 
 
-def sample_camera(rng, ports, landmarks, config):
+def sample_camera(rng, ports, landmarks, config, window_context=None):
     target_cfg = config['targets']
+    width,height=config['resolution'];s=config['scope'];intr=config['intrinsics']
+    fov=normal(rng,s['horizontal_fov_deg'])
+    focal=width/(2*np.tan(np.deg2rad(fov)/2))
+    if intr['focal_x_px'] is not None:
+        focal=normal(rng,intr['focal_x_px']);fov=float(np.rad2deg(2*np.arctan(width/(2*focal))))
+    fy=focal*normal(rng,intr['fy_over_fx'])
     name = choice(rng, {'values': target_cfg['names'], 'weights': target_cfg['weights']})
     jitter = rng.normal(size=3)
     if np.any(np.abs(jitter) > target_cfg['jitter_limit_sd']):
         raise RejectPose("target jitter tail")
     target = np.array(landmarks[name]) + jitter * target_cfg['jitter_sd_mm']
+    coupled=config.get('window_coupling',{});window=None;occupancy=None
+    if coupled.get('enabled',False):
+        from .window_camera import is_removed
+        if window_context is None or not window_context['windows']:raise RejectPose('no exposed pleural aperture')
+        candidates=window_context['windows']
+        weights=[coupled['anchor_weights'].get(w['anchor'],0.)*w.get('center_distance_weight',1.) for w in candidates]
+        index=choice(rng,{'values':list(range(len(candidates))),'weights':weights})
+        window=candidates[index]
+        if rng.random()<coupled['center_target_probability']:
+            name='window:'+window['name']
+            target=np.array(window['center_mm'])+jitter*min(coupled['jitter_sd_mm'],window['effective_radius_mm']*coupled['maximum_jitter_radius_fraction'])
+        else:
+            names=[n for n in target_cfg['names'] if n in window_context['exposed_landmarks']]
+            if not names:raise RejectPose('no exposed landmark')
+            name=choice(rng,{'values':names,'weights':[target_cfg['weights'][target_cfg['names'].index(n)] for n in names]})
+            target=np.array(landmarks[name])+jitter*target_cfg['jitter_sd_mm']
+            window=min(candidates,key=lambda w:np.linalg.norm(target-np.array(w['center_mm'])))
+        if not is_removed(target,window_context):raise RejectPose('target outside dissection window')
+        occupancy=normal(rng,coupled['short_side_occupancy'])
     # Prefer scope ports close to the target's craniocaudal level.
     positions = np.array([p['position_mm'] for p in ports])
     weights = np.exp(-0.5 * ((positions[:, 2] - target[2]) / config['ports']['scope_port_height_sd_mm'])**2)
     lengths = np.linalg.norm(positions-target,axis=1)
     lo,hi=config['ports']['port_to_target_mm']
     weights *= (lengths>=lo)&(lengths<=hi)
+    if window is not None:
+        weights*=np.arange(len(ports))==window['port_index']
     if weights.sum()<=0:raise RejectPose('no reachable scope port')
     port_index = int(rng.choice(len(ports), p=weights / weights.sum()))
     port = positions[port_index]
@@ -123,7 +150,7 @@ def sample_camera(rng, ports, landmarks, config):
         raise RejectPose("port-target distance")
     s = config['scope']
     w = s['working_distance_mm']
-    distance = float(rng.lognormal(w['log_mean'], w['log_sd']))
+    distance = float(2*window['effective_radius_mm']/(min(width/focal,height/fy)*occupancy)) if window else float(rng.lognormal(w['log_mean'], w['log_sd']))
     if not w['min'] <= distance <= w['max']:
         raise RejectPose("working distance prior tail")
     theta = float(choice(rng, s['oblique_angle_deg']))
@@ -146,18 +173,11 @@ def sample_camera(rng, ports, landmarks, config):
     c2w[:3, :3] = np.column_stack([right, up, -view])  # Blender looks along -Z
     c2w[:3, 3] = tip
     cv_to_world = c2w @ np.diag([1., -1., -1., 1.])
-    width, height = config['resolution']
-    fov = normal(rng, s['horizontal_fov_deg'])
-    focal = width / (2 * np.tan(np.deg2rad(fov)/2))
-    intr=config['intrinsics']
-    if intr['focal_x_px'] is not None:
-        focal=normal(rng,intr['focal_x_px'])
-        fov=float(np.rad2deg(2*np.arctan(width/(2*focal))))
-    fy=focal*normal(rng,intr['fy_over_fx'])
     cx=(width-1)/2+normal(rng,intr['principal_x_offset_fraction'])*width
     cy=(height-1)/2+normal(rng,intr['principal_y_offset_fraction'])*height
     k = [[focal, 0., cx], [0., fy, cy], [0., 0., 1.]]
     return {'target_name': name, 'target_mm': target.tolist(), 'scope_port_index': port_index,
+            'window_coupling':None if window is None else {'window':window,'requested_short_side_occupancy':occupancy,'size_model':'local inscribed aperture; face-on pinhole approximation, not measured silhouette occupancy'},
             'port_mm': port.tolist(), 'tip_mm': tip.tolist(), 'shaft_axis_ras': shaft.tolist(),
             'optical_axis_ras': view.tolist(), 'oblique_angle_deg': theta,
             'shaft_rotation_rad': rotation, 'sensor_roll_deg': roll,
