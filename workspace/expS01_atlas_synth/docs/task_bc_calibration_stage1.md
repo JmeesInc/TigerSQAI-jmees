@@ -1,3 +1,5 @@
+> Round 4 supersedes the acceptance/reference and bank instructions below. See `round4_20260909.md`; Round 3 pass reports are no longer accepted.
+
 > 2026-09-09 Round 3追記: バンク生成は128枚の4指標合格と12/8/9の可視確認まで停止。新しい必須引数 `--calibration-report` と最新の条件は [round3_20260909.md](round3_20260909.md) を参照。下記Stage 1初版の時間・結果は履歴。
 
 # B改訂・C Stage 1 — ローカル較正とアトラス登録

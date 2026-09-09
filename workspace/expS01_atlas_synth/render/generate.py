@@ -44,7 +44,7 @@ def validate(camera,dissection,atlas):
         raise ValueError('Fat and pleura may not be disabled')
     ids={int(k) for k in atlas['objects']}
     if not ids<=set(range(1,31)):raise ValueError('Invalid fine IDs')
-    if atlas['context_class_id'] not in [0,2]:raise ValueError('Context ribs require explicit background/Other convention')
+    if atlas['context_class_id'] not in [0,2,10]:raise ValueError('Context class must be 0, 2, or covered chest-wall Pleura 10')
     progress=dissection['progress']
     if progress['alpha']<=0 or progress['beta']<=0 or not 0<=progress.get('min',0)<progress.get('max',1)<=1:
         raise ValueError('Invalid truncated Beta progress prior')
@@ -112,7 +112,7 @@ def prepare(args,camera,dissection,atlas,output):
     if missing:raise ValueError(f'ROI discarded declared classes: {missing}')
     print('Building union fat volume and pleural shell...',flush=True)
     volume=build_volume(objects,atlas,dissection)
-    save_meshes(work/'base.npz',objects)
+    # Base is saved after fitting the port-pierced parietal wall below.
     np.savez_compressed(work/'envelope.npz',**volume)
     atomic_json(work/'camera_config.json',camera)
     atomic_json(output/'resolved_configs.json',{'camera':camera,'dissection':dissection,'atlas':atlas})
@@ -128,7 +128,11 @@ def prepare(args,camera,dissection,atlas,output):
         low,high=camera['ports']['port_to_target_mm']
         if np.all(np.any((distances>=low)&(distances<=high),axis=0)):break
     else:raise ValueError('No port layout reaches all nominated targets under distance limits')
-    provenance={'atlas_sha256':digest,'atlas_source':atlas['source_url'],'atlas_license':atlas['license'],
+    from .chest_wall import build_chest_wall
+    wall=build_chest_wall(objects,ports,atlas.get('parietal_pleura',{}))
+    if wall is not None:objects.append(wall)
+    save_meshes(work/'base.npz',objects)
+    provenance={'parietal_pleura':{'enabled':wall is not None,'status':'provisional_rib_envelope','method':'inset convex rib-cage envelope with physical port openings'},'atlas_sha256':digest,'atlas_source':atlas['source_url'],'atlas_license':atlas['license'],
                 'atlas_attribution':atlas['attribution'],'manifest_status':atlas['status'],
                 'registration':registration,'patient_manifest':patient,'ports':ports,
                 'landmarks_mm':landmarks,'right_lung_collapse':collapse,
@@ -140,6 +144,7 @@ def prepare(args,camera,dissection,atlas,output):
 
 
 def instruments(rng,ports,camera,cfg):
+    if not cfg.get('enabled',True):return []
     count=int(choice(rng,cfg['count']))
     allowed=[i for i in range(len(ports)) if i!=camera['scope_port_index']]
     rng.shuffle(allowed)

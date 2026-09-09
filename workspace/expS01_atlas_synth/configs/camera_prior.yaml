@@ -62,22 +62,19 @@ quality:
   maximum_class_fraction: 0.95
   maximum_background_fraction: 0.85
   minimum_valid_optics_fraction: 0.98
-  # User aggregate p10..p90; foreground only, visible at >=1 pixel.
+  # Final Round 4 aggregate p10..p90; anatomy IDs 3–30, visible at >=1 pixel.
   visible_class_count:
     enabled: true
-    min: 11
-    max: 18
+    min: 8
+    max: 15
     minimum_pixels: 1
     includes_background: false
-    soft_preference:
-      mean: 15.0
-      sd: 2.0
-      # Public-atlas pilot, 128 accepted frames; this is NOT real-mask data.
-      proposal_counts: {11: 16, 12: 13, 13: 8, 14: 9, 15: 13, 16: 27, 17: 20, 18: 22}
+    class_ids: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+    soft_preference: null # Round 3 pilot no longer applies
 window_coupling:
   enabled: true
   center_target_probability: 0.85
-  short_side_occupancy: {mean: 0.65, sd: 0.08, min: 0.50, max: 0.80}
+  short_side_occupancy: {mean: 1.10, sd: 0.15, min: 0.80, max: 1.40}
   jitter_sd_mm: 5.0
   maximum_jitter_radius_fraction: 0.25
   anchor_weights: {inferior: 0.25, esophagus: 0.30, bronchus: 0.15, azygos: 0.10, upper: 0.10, aorta: 0.10}

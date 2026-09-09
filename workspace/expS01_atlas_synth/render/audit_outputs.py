@@ -10,6 +10,9 @@ from PIL import Image
 def audit(output):
     files=sorted((output/'label').glob('*.png'))
     if not files:raise ValueError('No output labels')
+    resolved=output/'resolved_configs.json'
+    cfg=json.loads(resolved.read_text()) if resolved.exists() else {}
+    no_tools=cfg.get('dissection',{}).get('instruments',{}).get('enabled') is False
     union=set();stages={};instrument_counts=set()
     for file in files:
         meta=json.loads((output/'meta'/f'{file.stem}.json').read_text())
@@ -17,6 +20,7 @@ def audit(output):
         labels=np.array(image);assert labels.dtype==np.uint8 and labels.max()<=30
         assert list(image.size)==meta['resolution']
         counts=np.bincount(labels.ravel(),minlength=31)
+        if no_tools:assert counts[1]==0 and meta['instrument_count']==0, 'Disabled instruments appeared'
         assert {str(i):int(c) for i,c in enumerate(counts)}==meta['class_pixel_counts']
         assert np.flatnonzero(counts[1:]).__add__(1).tolist()==meta['visible_class_ids']
         with OpenEXR.File(str(output/'depth'/f'{file.stem}.exr'),separate_channels=True) as exr:

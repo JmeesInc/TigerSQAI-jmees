@@ -1,3 +1,7 @@
+# Round 4 update
+
+The active reference is `assets/reference_anatomy_only.yaml`: IDs 3–30, per-frame anatomy normalization. Instruments are disabled; no circular FOV mask is generated. Round 3 reports cannot unlock the bank. See `docs/round4_20260909.md`.
+
 # Tier 0：内視鏡クラスIDレンダラ
 
 Round 3: [窓とカメラの結合・IPV保護・128枚受入条件](../docs/round3_20260909.md)。バンク生成は受入ゲート通過まで停止。

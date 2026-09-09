@@ -19,6 +19,8 @@ def main():
         names += [(0,n,'proxy_source') for n in proxy['pericardium']['source_objects']]
     words = {3:'Third',4:'Fourth',5:'Fifth',6:'Sixth',7:'Seventh',8:'Eighth',9:'Ninth',10:'Tenth'}
     names += [(i, f'{word} rib.r', 'rib') for i, word in words.items()]
+    if cfg.get('parietal_pleura',{}).get('enabled',False):
+        names += [(int(cfg['context_class_id']),f'{word} rib.l','chest_support') for word in words.values()]
     for i, (fine_id, name, role) in enumerate(names):
         obj = bpy.data.objects.get(name)
         if obj is None:
@@ -36,8 +38,8 @@ def main():
             raise ValueError(f'Nonfinite geometry: {name}')
         if role == 'rib':
             ribs[str(fine_id)] = vertices.tolist()
-            # Existing rib surfaces also constrain the port/shaft path. Label 0:
-            # contextual anatomy outside the challenge foreground taxonomy.
+            # Rib surfaces also constrain the port/shaft path. Round 4 assigns
+            # the covered chest-wall class, while a separate mesh bridges gaps.
             fine_id=int(cfg['context_class_id'])
         key = f'o{i}'
         arrays[key+'_v'], arrays[key+'_f'] = vertices.astype(np.float32), faces

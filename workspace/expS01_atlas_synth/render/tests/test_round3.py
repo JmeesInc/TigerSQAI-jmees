@@ -18,7 +18,7 @@ class Round3Tests(unittest.TestCase):
         import json
         import tempfile
         configuration={'camera':{'seed':1,'resolution':[256,144]},'dissection':{},'atlas':{}}
-        report={'acceptance':{'bank_generation_allowed':True,'batch_complete':True,'frames':128,'missing_required_bank_class_ids':[]},'render_configuration':configuration}
+        report={'acceptance':{'schema_version':2,'bank_generation_allowed':True,'batch_complete':True,'frames':128,'missing_required_bank_class_ids':[]},'render_configuration':configuration}
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/'comparison.json';path.write_text(json.dumps(report))
             changed=copy.deepcopy(configuration);changed['camera']['seed']=2
@@ -30,9 +30,9 @@ class Round3Tests(unittest.TestCase):
 
     def test_count_prior_corrects_empirical_proposal(self):
         cfg=yaml.safe_load((ROOT/'configs/camera_prior.yaml').read_text())
-        q=cfg['quality']['visible_class_count'];prior=q['soft_preference'];support=np.arange(q['min'],q['max']+1)
+        q=cfg['quality']['visible_class_count'];q['soft_preference']={'mean':12,'sd':2,'proposal_counts':{i:i for i in range(8,16)}};prior=q['soft_preference'];support=np.arange(q['min'],q['max']+1)
         p=np.array([prior['proposal_counts'][int(n)] for n in support],float)
-        accept=np.array([class_count_probability(np.arange(1,n+1,dtype=np.uint8)[None,:],cfg) for n in support])
+        accept=np.array([class_count_probability(np.arange(3,n+3,dtype=np.uint8)[None,:],cfg) for n in support])
         expected=np.exp(-.5*((support-prior['mean'])/prior['sd'])**2)
         np.testing.assert_allclose(p*accept/np.sum(p*accept),expected/expected.sum())
         self.assertTrue(np.all((accept>=0)&(accept<=1)))
@@ -65,8 +65,8 @@ class Round3Tests(unittest.TestCase):
         self.assertLess(np.min(np.linalg.norm(uncut[:,:2],axis=1)),1.)
 
     def test_joint_acceptance_and_small_sample(self):
-        ref=yaml.safe_load((ROOT/'assets/real_mask_statistics.yaml').read_text());cfg=yaml.safe_load((ROOT/'configs/acceptance.yaml').read_text())
-        s={'frames':128,'presence_pct':[r['presence_pct'] for r in ref['classes']],'mean_area_pct':[r['mean_area_pct'] for r in ref['classes']],'visible_class_count':{'median':15},'background_summary':{'median_pct':18.}}
+        ref=yaml.safe_load((ROOT/'assets/reference_anatomy_only.yaml').read_text());cfg=yaml.safe_load((ROOT/'configs/acceptance.yaml').read_text())
+        s={'frames':128,'presence_pct':[0,0,0]+[r['presence_pct'] for r in ref['classes']],'mean_area_pct':[0,0,0]+[r['mean_area_pct'] for r in ref['classes']],'visible_class_count':{'median':12},'background_summary':{'median_pct':1.}}
         self.assertTrue(evaluate(s,ref,cfg)['bank_generation_allowed'])
         s['frames']=127;self.assertFalse(evaluate(s,ref,cfg)['acceptance_passed']);s['frames']=128
         s['mean_area_pct'][10]=65.;self.assertFalse(evaluate(s,ref,cfg)['acceptance_passed'])

@@ -42,11 +42,13 @@ def distances(query,bank,ids,weights):
     return sum(weights[k]*v for k,v in terms.items())/sum(weights.values())
 
 
-def weighted_iou(real,synth,ids,weights,minimum_pixels=1):
+def weighted_iou(real,synth,ids,weights,minimum_pixels=1,real_background_policy='ignore'):
     eligible=np.zeros(31,bool);eligible[ids]=True
     # Excluded foreground (e.g. tools) is unknown occlusion on either side.
-    # Background stays comparable, so supported-vs-background errors are penalized.
+    # Real background is unknown FOV; synthetic background under real anatomy remains an error.
     valid=((real==0)|eligible[real]) & ((synth==0)|eligible[synth])
+    if real_background_policy=='ignore':valid &= real!=0
+    elif real_background_policy!='compare':raise ValueError('Unknown real_background_policy')
     common=[];scores={};numerator=denominator=0.
     for c in ids:
         a=(real==c)&valid;b=(synth==c)&valid;union=np.count_nonzero(a|b)

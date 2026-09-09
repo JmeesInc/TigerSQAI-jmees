@@ -1,4 +1,4 @@
-"""Do not build a search bank until Round 3 aggregate and class-coverage gates pass."""
+"""Do not build a search bank until Round 4 aggregate and class-coverage gates pass."""
 import json
 from pathlib import Path
 from copy import deepcopy
@@ -7,8 +7,8 @@ from copy import deepcopy
 def require_report(path,configuration=None):
     if path is None:raise ValueError('Bank blocked: provide a >=128-frame calibration comparison.json with all four criteria and IDs 12/8/9 passing')
     report=json.loads(Path(path).read_text());gate=report.get('acceptance',{})
-    if not gate.get('bank_generation_allowed',False) or not gate.get('batch_complete',False) or gate.get('frames',0)<128 or gate.get('missing_required_bank_class_ids',[12,8,9]):
-        raise ValueError('Bank blocked by Round 3 calibration/coverage gate')
+    if gate.get('schema_version')!=2 or not gate.get('bank_generation_allowed',False) or not gate.get('batch_complete',False) or gate.get('frames',0)<128 or gate.get('missing_required_bank_class_ids',[12,8,9]):
+        raise ValueError('Bank blocked by Round 4 calibration/coverage gate')
     if configuration is not None:
         def canonical(value):
             value=deepcopy(value)

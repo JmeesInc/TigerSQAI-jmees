@@ -39,7 +39,7 @@ def reject_reason(label,valid,config,progress):
     if counts[0]/label.size>q['maximum_background_fraction']:return 'background dominance'
     classes=q.get('visible_class_count',{})
     if classes.get('enabled',False):
-        n=int(np.count_nonzero(counts[0 if classes.get('includes_background',False) else 1:]>=classes.get('minimum_pixels',1)))
+        n=int(np.count_nonzero(counts[classes.get('class_ids',list(range(0 if classes.get('includes_background',False) else 1,31)))]>=classes.get('minimum_pixels',1)))
         if not classes['min']<=n<=classes['max']:return 'visible class count'
     major=q['main_class_ids'][:]
     if progress<=q['covered_phase_t_max']:major+=q['covered_phase_class_ids']
@@ -53,7 +53,7 @@ def class_count_probability(label,config):
     prior=q.get('soft_preference')
     if not q.get('enabled',False) or prior is None:return 1.
     counts=np.bincount(label.ravel(),minlength=31)
-    n=np.count_nonzero(counts[0 if q.get('includes_background',False) else 1:]>=q.get('minimum_pixels',1))
+    n=np.count_nonzero(counts[q.get('class_ids',list(range(0 if q.get('includes_background',False) else 1,31)))]>=q.get('minimum_pixels',1))
     if prior.get('proposal_counts'):
         support=np.arange(q['min'],q['max']+1)
         proposal=np.array([prior['proposal_counts'].get(int(k),prior['proposal_counts'].get(str(k),0)) for k in support],float)

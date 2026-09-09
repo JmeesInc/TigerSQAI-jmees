@@ -51,8 +51,8 @@ class RegistrationTests(unittest.TestCase):
         v,f=heart_surface([o],{'voxel_mm':1,'margin_mm':2,'closing_iterations':1});self.assertGreater(len(f),0);self.assertGreater(np.ptp(v[:,0]),10)
 
     def test_foreground_class_count_filter(self):
-        cfg=yaml.safe_load((ROOT/'configs/camera_prior.yaml').read_text());a=np.tile(np.arange(11,dtype=np.uint8),(24,24));reason=reject_reason(a,np.ones_like(a,bool),cfg,.8);self.assertEqual(reason,'visible class count')
-        a=np.tile(np.arange(12,dtype=np.uint8),(24,24));self.assertIsNone(reject_reason(a,np.ones_like(a,bool),cfg,.8))
+        cfg=yaml.safe_load((ROOT/'configs/camera_prior.yaml').read_text());a=np.tile(np.arange(10,dtype=np.uint8),(24,24));reason=reject_reason(a,np.ones_like(a,bool),cfg,.8);self.assertEqual(reason,'visible class count')
+        a=np.tile(np.arange(11,dtype=np.uint8),(24,24));self.assertIsNone(reject_reason(a,np.ones_like(a,bool),cfg,.8))
 
     def test_fit_gates_do_not_treat_duplicates_as_diversity(self):
         cfg=yaml.safe_load((ROOT/'configs/registration.yaml').read_text())

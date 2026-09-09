@@ -1,0 +1,158 @@
+schema_version: 2
+frames: 528
+source: User-shared final aggregate reference 2026-09-09; no real masks accessed
+included_class_ids:
+- 3
+- 4
+- 5
+- 6
+- 7
+- 8
+- 9
+- 10
+- 11
+- 12
+- 13
+- 14
+- 15
+- 16
+- 17
+- 18
+- 19
+- 20
+- 21
+- 22
+- 23
+- 24
+- 25
+- 26
+- 27
+- 28
+- 29
+- 30
+excluded_class_ids:
+- 0
+- 1
+- 2
+area_normalization: per_frame_anatomy_pixels_then_mean
+classes:
+- fine_id: 3
+  name: Trachea
+  presence_pct: 58
+  mean_area_pct: 4.08
+- fine_id: 4
+  name: Right main bronchus
+  presence_pct: 54.5
+  mean_area_pct: 2.88
+- fine_id: 5
+  name: Left main bronchus
+  presence_pct: 60.4
+  mean_area_pct: 2.91
+- fine_id: 6
+  name: Esophagus
+  presence_pct: 85.6
+  mean_area_pct: 10.79
+- fine_id: 7
+  name: Fatty tissue esophagus
+  presence_pct: 55.9
+  mean_area_pct: 4.71
+- fine_id: 8
+  name: Right inferior pulmonary ligament
+  presence_pct: 25.9
+  mean_area_pct: 0.8
+- fine_id: 9
+  name: Left inferior pulmonary ligament
+  presence_pct: 27.1
+  mean_area_pct: 0.33
+- fine_id: 10
+  name: Pleura
+  presence_pct: 93.2
+  mean_area_pct: 22.4
+- fine_id: 11
+  name: Pericardium
+  presence_pct: 70.8
+  mean_area_pct: 6.08
+- fine_id: 12
+  name: Inferior pulmonary vein
+  presence_pct: 58.3
+  mean_area_pct: 4.47
+- fine_id: 13
+  name: Right subclavian artery
+  presence_pct: 2.5
+  mean_area_pct: 0.1
+- fine_id: 14
+  name: Right vagal nerve
+  presence_pct: 40.7
+  mean_area_pct: 1.09
+- fine_id: 15
+  name: Aorta
+  presence_pct: 72.3
+  mean_area_pct: 6.22
+- fine_id: 16
+  name: Azygos vein
+  presence_pct: 69.5
+  mean_area_pct: 2.37
+- fine_id: 17
+  name: Superior caval vein
+  presence_pct: 11.6
+  mean_area_pct: 0.5
+- fine_id: 18
+  name: Lung
+  presence_pct: 71
+  mean_area_pct: 12.44
+- fine_id: 19
+  name: Lymph node
+  presence_pct: 65.3
+  mean_area_pct: 3.44
+- fine_id: 20
+  name: Fatty tissue
+  presence_pct: 84.1
+  mean_area_pct: 4.07
+- fine_id: 21
+  name: Left subclavian artery
+  presence_pct: 0.2
+  mean_area_pct: 0.01
+- fine_id: 22
+  name: Right bronchial artery
+  presence_pct: 0
+  mean_area_pct: 0
+- fine_id: 23
+  name: Pulmonary artery
+  presence_pct: 7
+  mean_area_pct: 0.15
+- fine_id: 24
+  name: Pool of blood
+  presence_pct: 53.6
+  mean_area_pct: 1.49
+- fine_id: 25
+  name: Resection area
+  presence_pct: 80.9
+  mean_area_pct: 4.96
+- fine_id: 26
+  name: Gastric conduit
+  presence_pct: 9.5
+  mean_area_pct: 1.5
+- fine_id: 27
+  name: Right recurrent laryngeal nerve
+  presence_pct: 4
+  mean_area_pct: 0.03
+- fine_id: 28
+  name: Left recurrent laryngeal nerve
+  presence_pct: 15.3
+  mean_area_pct: 0.27
+- fine_id: 29
+  name: Omentum
+  presence_pct: 11.7
+  mean_area_pct: 1.57
+- fine_id: 30
+  name: Thoracic duct
+  presence_pct: 17.6
+  mean_area_pct: 0.17
+visible_class_count:
+  p10: 8
+  median: 12
+  p90: 15
+background_summary:
+  target_interval_pct:
+  - 0
+  - 2

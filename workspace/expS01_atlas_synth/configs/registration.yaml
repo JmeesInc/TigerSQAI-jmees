@@ -23,3 +23,6 @@ prior_fit:
   shrinkage_pseudocount: 10.0
   minimum_sd_fraction_of_original: 0.50
   maximum_single_pose_fraction: 0.25
+
+# Real class 0 is unknown/outside FOV, regardless of RGB brightness.
+real_background_policy: ignore

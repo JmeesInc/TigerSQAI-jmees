@@ -64,7 +64,7 @@ def run(bank_path,masks,output,cfg,mapping):
             nearest=np.argsort(d,kind='stable')[:cfg['knn_k']];candidates=[]
             for index in nearest:
                 rec=records[int(index)];synth,_=read_label(bank_path/'labels'/f"{rec['bank_id']}.png")
-                match=weighted_iou(real,synth,ids,weights,cfg['minimum_pixels'])
+                match=weighted_iou(real,synth,ids,weights,cfg['minimum_pixels'],cfg.get('real_background_policy','ignore'))
                 candidates.append({'bank_id':rec['bank_id'],'descriptor_distance':float(d[index]),**match,'source_meta':rec['meta']})
             candidates.sort(key=lambda x:(-x['weighted_iou'],x['descriptor_distance'],x['bank_id']))
             best=candidates[0]

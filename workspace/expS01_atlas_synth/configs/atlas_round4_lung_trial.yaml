@@ -1,0 +1,150 @@
+schema_version: 1
+blend: Z-Anatomy/Startup.blend
+sha256: 9f08a17ea0115fed80b2a73ecdf0a1bc2ab2f6956f37c593ce23d513ea35afcd
+status: provisional_object_identity_not_fma_verified
+context_class_id: 10
+source_url: https://github.com/Z-Anatomy/Models-of-human-anatomy
+license: CC-BY-SA-4.0
+attribution: "Z-Anatomy; BodyParts3D \u2014 DBCLS. See upstream per-component credits."
+atlas_to_ras_mm:
+- - -1000
+  - 0
+  - 0
+  - 0
+- - 0
+  - -1000
+  - 0
+  - 0
+- - 0
+  - 0
+  - 1000
+  - -1300
+- - 0
+  - 0
+  - 0
+  - 1
+roi_mm:
+- - -160
+  - -130
+  - -160
+- - 160
+  - 130
+  - 180
+unavailable_class_ids:
+- 2
+- 8
+- 9
+- 11
+- 22
+- 26
+- 27
+- 28
+- 29
+- 30
+objects:
+  3:
+  - Trachea
+  4:
+  - Right main bronchus
+  5:
+  - Left main bronchus
+  6:
+  - Oesophagus
+  12:
+  - Right inferior pulmonary vein
+  - Left inferior pulmonary vein
+  13:
+  - Right subclavian artery
+  14:
+  - Vagus nerve (X).r
+  15:
+  - Ascending aorta
+  - Aortic arch
+  - Thoracic aorta
+  16:
+  - Azygos vein
+  17:
+  - Superior vena cava
+  18:
+  - Inferior lobe of left lung
+  - Inferior lobe of right lung
+  - Middle lobe of right lung
+  - Superior lobe of left lung
+  - Superior lobe of right lung
+  19:
+  - Paratracheal thoracic nodes
+  - Inferior tracheobronchial nodes
+  - Superior tracheobronchial nodes
+  - Juxta-oesophageal nodes
+  - Subaortic nodes
+  - Node of arch of azygos vein
+  21:
+  - Left subclavian artery
+  23:
+  - Pulmonary trunk
+  - Bifurcation of pulmonary trunk
+  - Right pulmonary artery
+  - Left pulmonary artery
+landmarks_mm:
+  carina:
+  - 0
+  - -8
+  - 60
+  bronchus:
+  - 8
+  - -12
+  - 48
+  esophagus:
+  - -3
+  - -17
+  - -8
+  azygos:
+  - 12
+  - -5
+  - 68
+  aorta:
+  - -16
+  - -22
+  - -20
+  upper:
+  - 0
+  - -12
+  - 122
+  inferior:
+  - 0
+  - -10
+  - -92
+right_lung_collapse:
+  enabled: true
+  lateral_pivot_mm: 120.0
+  scale:
+  - 0.7
+  - 0.85
+  - 0.95
+provisional:
+  enabled: true
+  pericardium:
+    enabled: true
+    source_objects:
+    - Left atrium
+    - Right atrium
+    - Left ventricle
+    - Right ventricle
+    voxel_mm: 2.0
+    margin_mm: 0.5
+    subtract_ipv: true
+    ipv_clearance_mm: 8.0
+    closing_iterations: 2
+  pulmonary_ligaments:
+    enabled: true
+    length_mm: 40.0
+    thickness_mm: 0.6
+    samples: 16
+    y_band_mm: 15.0
+    z_band_mm: 8.0
+parietal_pleura:
+  enabled: true
+  inset_mm: 3.0
+  mesh_edge_mm: 6.0
+  port_radius_mm: 10.0
+  port_tunnel_length_mm: 30.0
