@@ -1,0 +1,245 @@
+[
+  {
+    "fine_id": 0,
+    "name": "Background",
+    "n_frames": 213,
+    "micro_contrast": 0.3568,
+    "edge_density": 0.0382,
+    "specular_pct": 0.0,
+    "anisotropy": 2.078
+  },
+  {
+    "fine_id": 1,
+    "name": "Instrument",
+    "n_frames": 231,
+    "micro_contrast": 0.2601,
+    "edge_density": 0.0839,
+    "specular_pct": 0.548,
+    "anisotropy": 1.416
+  },
+  {
+    "fine_id": 2,
+    "name": "Other",
+    "n_frames": 96,
+    "micro_contrast": 0.3324,
+    "edge_density": 0.1268,
+    "specular_pct": 0.584,
+    "anisotropy": 1.242
+  },
+  {
+    "fine_id": 3,
+    "name": "Trachea",
+    "n_frames": 139,
+    "micro_contrast": 0.2301,
+    "edge_density": 0.08,
+    "specular_pct": 0.03,
+    "anisotropy": 1.333
+  },
+  {
+    "fine_id": 4,
+    "name": "Right main bronchus",
+    "n_frames": 127,
+    "micro_contrast": 0.2292,
+    "edge_density": 0.0843,
+    "specular_pct": 0.016,
+    "anisotropy": 1.281
+  },
+  {
+    "fine_id": 5,
+    "name": "Left main bronchus",
+    "n_frames": 167,
+    "micro_contrast": 0.2953,
+    "edge_density": 0.1061,
+    "specular_pct": 0.055,
+    "anisotropy": 1.278
+  },
+  {
+    "fine_id": 6,
+    "name": "Esophagus",
+    "n_frames": 226,
+    "micro_contrast": 0.2459,
+    "edge_density": 0.0847,
+    "specular_pct": 0.122,
+    "anisotropy": 1.243
+  },
+  {
+    "fine_id": 7,
+    "name": "Fatty tissue esophagus",
+    "n_frames": 139,
+    "micro_contrast": 0.2677,
+    "edge_density": 0.1087,
+    "specular_pct": 0.237,
+    "anisotropy": 1.198
+  },
+  {
+    "fine_id": 8,
+    "name": "Right inferior pulmonary ligament",
+    "n_frames": 40,
+    "micro_contrast": 0.194,
+    "edge_density": 0.0752,
+    "specular_pct": 0.0,
+    "anisotropy": 1.266
+  },
+  {
+    "fine_id": 9,
+    "name": "Left inferior pulmonary ligament",
+    "n_frames": 49,
+    "micro_contrast": 0.3287,
+    "edge_density": 0.1361,
+    "specular_pct": 0.054,
+    "anisotropy": 1.207
+  },
+  {
+    "fine_id": 10,
+    "name": "Pleura",
+    "n_frames": 241,
+    "micro_contrast": 0.2008,
+    "edge_density": 0.0571,
+    "specular_pct": 0.225,
+    "anisotropy": 1.375
+  },
+  {
+    "fine_id": 11,
+    "name": "Pericardium",
+    "n_frames": 176,
+    "micro_contrast": 0.1978,
+    "edge_density": 0.069,
+    "specular_pct": 0.003,
+    "anisotropy": 1.27
+  },
+  {
+    "fine_id": 12,
+    "name": "Inferior pulmonary vein",
+    "n_frames": 150,
+    "micro_contrast": 0.1837,
+    "edge_density": 0.0624,
+    "specular_pct": 0.004,
+    "anisotropy": 1.33
+  },
+  {
+    "fine_id": 14,
+    "name": "Right vagal nerve",
+    "n_frames": 75,
+    "micro_contrast": 0.2079,
+    "edge_density": 0.0763,
+    "specular_pct": 0.047,
+    "anisotropy": 1.368
+  },
+  {
+    "fine_id": 15,
+    "name": "Aorta",
+    "n_frames": 207,
+    "micro_contrast": 0.2352,
+    "edge_density": 0.0796,
+    "specular_pct": 0.087,
+    "anisotropy": 1.226
+  },
+  {
+    "fine_id": 16,
+    "name": "Azygos vein",
+    "n_frames": 166,
+    "micro_contrast": 0.2524,
+    "edge_density": 0.0919,
+    "specular_pct": 0.211,
+    "anisotropy": 1.413
+  },
+  {
+    "fine_id": 17,
+    "name": "Superior caval vein",
+    "n_frames": 13,
+    "micro_contrast": 0.201,
+    "edge_density": 0.0975,
+    "specular_pct": 0.009,
+    "anisotropy": 1.308
+  },
+  {
+    "fine_id": 18,
+    "name": "Lung",
+    "n_frames": 175,
+    "micro_contrast": 0.2011,
+    "edge_density": 0.0628,
+    "specular_pct": 0.071,
+    "anisotropy": 1.27
+  },
+  {
+    "fine_id": 19,
+    "name": "Lymph node",
+    "n_frames": 150,
+    "micro_contrast": 0.283,
+    "edge_density": 0.1099,
+    "specular_pct": 0.185,
+    "anisotropy": 1.202
+  },
+  {
+    "fine_id": 20,
+    "name": "Fatty tissue",
+    "n_frames": 205,
+    "micro_contrast": 0.2637,
+    "edge_density": 0.1014,
+    "specular_pct": 0.185,
+    "anisotropy": 1.19
+  },
+  {
+    "fine_id": 23,
+    "name": "Pulmonary artery",
+    "n_frames": 17,
+    "micro_contrast": 0.2874,
+    "edge_density": 0.1212,
+    "specular_pct": 0.476,
+    "anisotropy": 1.164
+  },
+  {
+    "fine_id": 24,
+    "name": "Pool of blood",
+    "n_frames": 121,
+    "micro_contrast": 0.4094,
+    "edge_density": 0.1183,
+    "specular_pct": 0.05,
+    "anisotropy": 1.29
+  },
+  {
+    "fine_id": 25,
+    "name": "Resection area",
+    "n_frames": 208,
+    "micro_contrast": 0.3336,
+    "edge_density": 0.1207,
+    "specular_pct": 0.073,
+    "anisotropy": 1.222
+  },
+  {
+    "fine_id": 26,
+    "name": "Gastric conduit",
+    "n_frames": 23,
+    "micro_contrast": 0.2254,
+    "edge_density": 0.0626,
+    "specular_pct": 0.095,
+    "anisotropy": 1.215
+  },
+  {
+    "fine_id": 28,
+    "name": "Left recurrent laryngeal nerve",
+    "n_frames": 41,
+    "micro_contrast": 0.2962,
+    "edge_density": 0.1142,
+    "specular_pct": 0.589,
+    "anisotropy": 1.341
+  },
+  {
+    "fine_id": 29,
+    "name": "Omentum",
+    "n_frames": 30,
+    "micro_contrast": 0.2597,
+    "edge_density": 0.085,
+    "specular_pct": 0.124,
+    "anisotropy": 1.261
+  },
+  {
+    "fine_id": 30,
+    "name": "Thoracic duct",
+    "n_frames": 21,
+    "micro_contrast": 0.2454,
+    "edge_density": 0.1035,
+    "specular_pct": 0.066,
+    "anisotropy": 1.374
+  }
+]

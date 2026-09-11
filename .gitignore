@@ -24,6 +24,8 @@ workspace/**
 !workspace/expS01_atlas_synth/**/*.txt
 !workspace/expS01_atlas_synth/assets/evidence/*.json
 !workspace/expS01_atlas_synth/.gitignore
+# Astra へ渡す較正資料。実データの集計値のみで、フレーム単位の派生物は含めない
+!workspace/expS01_atlas_synth/assets_local/*.json
 
 # ===== Generic experiment artifacts (top-level too) =====
 wandb/
@@ -77,6 +79,10 @@ __pycache__/
 # ===== Submission packages: keep our own scripts, drop vendored repos & artifacts =====
 submit/**/.git/
 submit/**/weights/
+# ローカル回帰テストの入出力（チャレンジデータそのもの。絶対に commit しない）
+submit/**/test/input/
+submit/**/test/output/
+submit/**/hosttest/
 submit/**/*.tar
 submit/**/*.tar.gz
 submit/**/*.zip

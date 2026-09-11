@@ -1,0 +1,44 @@
+experiment:
+  name: expG02_pretrain_synth
+  seed: 42
+paths:
+  images_dir: workspace/expG02_synthpretrain/data/images_1024
+  labels_fine_dir: workspace/expG02_synthpretrain/data/labels_fine_1024
+  labels_coarse_dir: workspace/expG02_synthpretrain/data/labels_coarse_1024
+  class_weights: workspace/data_proc/class_weights.json
+  results_root: workspace/expG02_synthpretrain/results
+  orig_images_dir: data/images
+  labelmap_csv: data/labelmap.csv
+cv:
+  folds_csv: workspace/expG02_synthpretrain/data/folds.csv
+wandb:
+  enabled: false
+  project: tigersqai
+model:
+  encoder_name: tu-maxvit_base_tf_512.in21k_ft_in1k
+  encoder_weights: imagenet
+  decoder_channels:
+  - 256
+  - 128
+  - 64
+  - 32
+  - 16
+  num_classes_fine: 31
+  num_classes_coarse: 16
+data:
+  img_h: 576
+  img_w: 1024
+  batch_size: 2
+  num_workers: 8
+loss:
+  name: dice
+  task1_weight: 0.5
+  task2_weight: 0.5
+  fine2coarse_weight: 0.25
+train:
+  epochs: 15
+  lr: 0.0002
+  weight_decay: 0.01
+  warmup_epochs: 3
+  accumulate_grad_batches: 4
+  precision: 16-mixed
