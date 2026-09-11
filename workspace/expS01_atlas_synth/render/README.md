@@ -1,3 +1,5 @@
+②の肺テクスチャ転写は [実装・再現手順](../docs/tier1_lung_texture_transfer_20260911.md) を参照。公開ドナーのBase Color/Heightを元の肺形状へベイクするオプションです。
+
 探索用の元材質バックエンド（①）と外部素材の調査（②）は [比較記録](../docs/tier1_native_and_external_exploration_20260911.md) を参照。①は試写済みですが、術野の見た目の改善策としては採用していません。
 
 # Appearance v2

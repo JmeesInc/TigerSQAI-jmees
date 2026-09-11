@@ -181,3 +181,9 @@ render.replay_rgbは保存camera/歪み・geometryから再出力。旧geometry 
 ユーザーから③の見た目が不十分との指摘。①を優先して実装・比較したが、29解剖オブジェクト/21元材質の不透明表面には画像/微細Noise/bumpがなく、血管が青紫・リンパ節が緑になる図譜配色。①は比較用バックエンドとして残し、改善策として既定採用しない。元の透過/断面/comic表示を除去し、不透明Principledと元の面材質/UVを転写する。肺材質のBLENDEDがAOVを壊した試験を検知・修正済み。最終4枚EEVEEでは元③のlabel/depth/geometry全12ファイルSHA一致、境界4/4、35テスト通過。8.74秒/4枚、描画0.89〜1.28秒。docs/tier1_native_and_external_exploration_20260911.md に比較・コマンド・各候補のライセンスを記録。
 
 次に選ぶなら②。neshalladsのRealistic Human Lungsはブラウザ実ページでCC BY4.0・無料Download確認、ログイン要求のため未取得。実体/UV/PBR品質は未検証。Human Anatomy Organs PackはNoAIを確認して除外。unlim3dの元候補は配布許諾未確認。BlenderKit肺はRoyalty free（CC0ではない）。MeshyはCC0案内があるがAI生成由来の適格性未確認。OpenGameArtのScribe肺はCC0として取得・監査したがUVなし、画像未同梱、旧Cloudsのみで不採用。新たな外部PBRを訓練用出力には使っていない。候補②の公開ファイルを取得後に肺のみ転写比較を行う。生成側のカメラ/ジオメトリ/剥離は変更していない。
+
+## 2026-09-11 neshallads ZIP受領・肺のみ転写
+
+realistic-human-lungs.zip (SHA 6ac2e8f0e0838d525ca0f4cdacd861a53b2fef160c8883e0d174c9a7b79c1d78) を確認。FBXと13画像、part01/02の各6枚は2K。Roughness=77/255定数、Metalness=0。CC BY4.0は前回配布ページで確認済み。part02肺表面のBase Color/Heightを使うオプションを実装。各側bbox→最近傍ドナー表面→UVサンプル→元アトラス三角形ごとのベイク。形状不変。元Normalは未使用、Heightは法線bumpのみ。暫定の見た目対応であり解剖登録ではない。低解像度ベイクと対応誤差の限界あり。
+
+最終outputs/lung_transfer_finalとoutputs/tier1_lung_texture。4枚でlabel/depth/geometry全12SHA一致、肺以外RGB完全一致。肺のないframe0はRGBも全体一致。38テスト、境界4/4、出力監査通過。描画初回1.92秒/以後0.74〜0.83秒、4枚起動込み7.24秒。見た目の変化は肺の色むら中心で、全術野の質感や拡散後Diceの改善は未確認。既定材質・2000枚バンクは変更しない。docs/tier1_lung_texture_transfer_20260911.mdに再現手順。バイナリアセットはGit自動同期外、ユーザー提供ZIPでローカル再現する。

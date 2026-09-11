@@ -1,0 +1,18 @@
+schema_version: 1
+source_url: https://sketchfab.com/3d-models/realistic-human-lungs-ce09f4099a68467880f46e61eb9a3531
+author: neshallads
+license: CC-BY-4.0
+license_url: https://creativecommons.org/licenses/by/4.0/
+archive_sha256: 6ac2e8f0e0838d525ca0f4cdacd861a53b2fef160c8883e0d174c9a7b79c1d78
+fbx: source/Lungs With Texture.fbx
+lung_material: thairoid01:lungh_part02
+base_color: textures/all_low_lunghs_BaseColor.lungh_part02.jpeg
+height: textures/all_low_lunghs_Height.lungh_part02.jpg
+# Appearance correspondence only. This is not anatomical registration.
+donor_to_ras_axes: [-1, -2, 3]
+status: provisional_bbox_surface_correspondence
+pixels_per_face: 8
+roughness: 0.30196078431372547
+specular: 0.5
+bump_strength: 0.3
+bump_distance_mm: 0.12
