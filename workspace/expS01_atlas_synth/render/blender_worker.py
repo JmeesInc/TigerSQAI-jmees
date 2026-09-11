@@ -22,7 +22,12 @@ def make_object(item,collection):
     obj=bpy.data.objects.new(item['name'],mesh)
     collection.objects.link(obj)
     obj.pass_index=int(item['fine_id'])
-    if MATERIALS:obj.data.materials.append(MATERIALS[obj.pass_index])
+    if MATERIALS:
+        obj.data.materials.append(MATERIALS[obj.pass_index])
+        if MATERIALS[obj.pass_index].get('smooth_shading',False):mesh.polygons.foreach_set('use_smooth',[True]*len(mesh.polygons))
+        from render.tissue_patterns import texture_axes,texture_transverse
+        for name,values in [('tissue_axial_mm',texture_axes(item['v'])),('tissue_transverse_mm',texture_transverse(item['v']))]:
+            attribute=mesh.attributes.new(name,'FLOAT','POINT');attribute.data.foreach_set('value',np.asarray(values,dtype=np.float32))
     return obj
 
 

@@ -1,3 +1,7 @@
+# Appearance v2
+
+Current defaults use shared chroma plus organ-specific procedural patterns. See `docs/tier1_appearance_v2_20260911.md`. Geometry and class IDs remain unchanged; EEVEE replays were checked for exact label/depth equality.
+
 # Tier 1 RGB
 
 `--emit-rgb --materials configs/materials.yaml` enables same-render EEVEE RGB / scalar-ID / depth. See `docs/tier1_20260911.md` for replay of existing synthetic batches and the Cycles-to-EEVEE exact-match limitation.

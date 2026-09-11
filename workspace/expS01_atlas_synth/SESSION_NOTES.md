@@ -166,3 +166,12 @@ Round 3の合格レポートはschema_version=2ゲートで拒否。Linuxはま�
 render.replay_rgbは保存camera/歪み・geometryから再出力。旧geometry snapshotなしはbase/envelopeと元の進行度RNGから復元し剥離meta一致を要求。旧器具ありsnapshotなしは拒否。既存CyclesラベルとのEEVEE比較では各2画素/256×144の差を確認、厳密guardでRGB保存前に停止した。新しい三点を採用する --rerender-triplet と、明示的Cycles互換 --engine cycles（今回未検証）を用意。自動fallbackしない。
 
 ユーザーに既存2000枚の扱いを質問済み、まだ回答なし。このMacにoutputs/pretrain_2kは存在せず、そのバッチ自体は処理していない。新規EEVEE生成は実行可能。実データは未アクセス、共有材質統計のみ使用。手順・制約・速度はdocs/tier1_20260911.md。Round4の解剖統計未達ゲートは解除していない。
+
+
+## 2026-09-11 Appearance v2（383c5da取り込み後）
+
+方式③を採用。共有real_class_chroma.jsonのr/g/b・彩度・vessel_patternを読み、色度入力は実測値へ差し替え。材質v1はconfigs/materials_tier1_v1.yamlに保存。新規外部PBRアセットなし。材質移植は採用せず、既存アトラスのUV/材質構成をread-only監査した（詳細docs）。血管柄は生成した分岐木の周期的box投影、肺/器具では無効。脂肪Voronoi、管状のPCA軸柄、気管支の輪、粒状リンパ節、液面/剥離面を材質で表現。新しい頂点・面・displacementは導入しない。
+
+同じ1024×576の4カメラで材質変更前後のlabel/depth/geometry全12ファイルSHA完全一致、境界診断4/4、33単体テスト通過。描画16クラスの無加重MAEはr色度0.17035→0.02145、彩度0.42408→0.03808。4枚の診断であり、拡散後忠実度は未検証。Mac/EEVEE再出力16.69秒/4枚、shader compile後の最後2枚renderは0.87/0.99秒。
+
+383c5da内の指示でユーザーが --rerender-triplet を採用したことを確認済み。Linuxの既存2000枚は同じcameraからEEVEE RGB/label/depthを一緒に再出力する。元2000枚はこのMacにないため全件処理は未実施。手順: docs/tier1_appearance_v2_20260911.md。材質だけの改訂で、Round4の解剖統計ゲートを解除するものではない。実画像・実マスクは未参照。

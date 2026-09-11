@@ -1,10 +1,9 @@
-# Colors are illustrative only; texture metrics are not direct BSDF measurements.
-schema_version: 1
+schema_version: 2
 engine: BLENDER_EEVEE_NEXT
 samples: 1
 light:
   energy: 60000.0
-  cutoff_distance_mm: 100000.0 # avoid EEVEE automatic range fade inside the thorax
+  cutoff_distance_mm: 100000.0
   radius_mm: 0.0
   environment_strength: 0.0
   model: point inverse square in millimetre scene units
@@ -33,6 +32,22 @@ classes:
     micro_contrast: 0.3568
     edge_density: 0.0382
     specular_pct: 0.0
+    base_chroma_rgb:
+    - 0.34426557344265574
+    - 0.3244675532446755
+    - 0.33126687331266874
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: membrane
+    vascular_strength: 0.0
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.0681
+    target_vessel_pattern: 0.06163
+    chroma_n_frames: 142
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   1:
     base_hue: 0.076
     saturation: 0.22
@@ -47,6 +62,22 @@ classes:
     micro_contrast: 0.2601
     edge_density: 0.0839
     specular_pct: 0.548
+    base_chroma_rgb:
+    - 0.4018401840184018
+    - 0.30223022302230224
+    - 0.29592959295929594
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: membrane
+    vascular_strength: 0.0
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.2606
+    target_vessel_pattern: 0.02739
+    chroma_n_frames: 155
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   2:
     base_hue: 0.137
     saturation: 0.22
@@ -61,6 +92,22 @@ classes:
     micro_contrast: 0.3324
     edge_density: 0.1268
     specular_pct: 0.584
+    base_chroma_rgb:
+    - 0.4153
+    - 0.2891
+    - 0.2956
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: membrane
+    vascular_strength: 0.0
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.3273
+    target_vessel_pattern: 0.04052
+    chroma_n_frames: 53
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   3:
     base_hue: 0.198
     saturation: 0.22
@@ -75,6 +122,22 @@ classes:
     micro_contrast: 0.2301
     edge_density: 0.08
     specular_pct: 0.03
+    base_chroma_rgb:
+    - 0.5403
+    - 0.2171
+    - 0.2426
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: rings
+    vascular_strength: 0.18912280701754391
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5965
+    target_vessel_pattern: 0.0396
+    chroma_n_frames: 101
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   4:
     base_hue: 0.259
     saturation: 0.22
@@ -89,6 +152,22 @@ classes:
     micro_contrast: 0.2292
     edge_density: 0.0843
     specular_pct: 0.016
+    base_chroma_rgb:
+    - 0.506
+    - 0.238
+    - 0.256
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: rings
+    vascular_strength: 0.2052368421052632
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5277
+    target_vessel_pattern: 0.04127
+    chroma_n_frames: 98
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   5:
     base_hue: 0.32
     saturation: 0.22
@@ -103,6 +182,22 @@ classes:
     micro_contrast: 0.2953
     edge_density: 0.1061
     specular_pct: 0.055
+    base_chroma_rgb:
+    - 0.5359
+    - 0.2165
+    - 0.2476
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: rings
+    vascular_strength: 0.23842982456140352
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5927
+    target_vessel_pattern: 0.04471
+    chroma_n_frames: 103
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   6:
     base_hue: 0.381
     saturation: 0.22
@@ -117,6 +212,22 @@ classes:
     micro_contrast: 0.2459
     edge_density: 0.0847
     specular_pct: 0.122
+    base_chroma_rgb:
+    - 0.4952
+    - 0.2397
+    - 0.2651
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: axial
+    vascular_strength: 0.19655263157894742
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5036
+    target_vessel_pattern: 0.04037
+    chroma_n_frames: 151
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   7:
     base_hue: 0.442
     saturation: 0.22
@@ -131,6 +242,22 @@ classes:
     micro_contrast: 0.2677
     edge_density: 0.1087
     specular_pct: 0.237
+    base_chroma_rgb:
+    - 0.4841
+    - 0.2583
+    - 0.2576
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: lobules
+    vascular_strength: 0.21430701754385967
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.4872
+    target_vessel_pattern: 0.04221
+    chroma_n_frames: 97
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   8:
     base_hue: 0.503
     saturation: 0.22
@@ -145,6 +272,22 @@ classes:
     micro_contrast: 0.194
     edge_density: 0.0752
     specular_pct: 0.0
+    base_chroma_rgb:
+    - 0.48785121487851213
+    - 0.25027497250274977
+    - 0.26187381261873816
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: membrane
+    vascular_strength: 0.20697368421052637
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5073
+    target_vessel_pattern: 0.04145
+    chroma_n_frames: 37
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   9:
     base_hue: 0.564
     saturation: 0.22
@@ -159,6 +302,22 @@ classes:
     micro_contrast: 0.3287
     edge_density: 0.1361
     specular_pct: 0.054
+    base_chroma_rgb:
+    - 0.5233
+    - 0.2276
+    - 0.2491
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: membrane
+    vascular_strength: 0.4041052631578948
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5613
+    target_vessel_pattern: 0.06188
+    chroma_n_frames: 30
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   10:
     base_hue: 0.625
     saturation: 0.22
@@ -166,13 +325,29 @@ classes:
     roughness: 0.3318
     specular: 0.4124
     bump_strength: 0.0817
-    bump_distance_mm: 0.25
-    noise_scale: 0.5019
+    bump_distance_mm: 0.05
+    noise_scale: 0.1
     texture_color_strength: 0.1004
     status: heuristic_from_shared_statistics
     micro_contrast: 0.2008
     edge_density: 0.0571
     specular_pct: 0.225
+    base_chroma_rgb:
+    - 0.4768
+    - 0.2593
+    - 0.2639
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: membrane
+    vascular_strength: 0.130359649122807
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.08
+    target_saturation: 0.4775
+    target_vessel_pattern: 0.03351
+    chroma_n_frames: 163
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   11:
     base_hue: 0.686
     saturation: 0.22
@@ -187,6 +362,22 @@ classes:
     micro_contrast: 0.1978
     edge_density: 0.069
     specular_pct: 0.003
+    base_chroma_rgb:
+    - 0.5242
+    - 0.2289
+    - 0.2469
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: membrane
+    vascular_strength: 0.14454385964912278
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5738
+    target_vessel_pattern: 0.03498
+    chroma_n_frames: 119
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   12:
     base_hue: 0.747
     saturation: 0.22
@@ -201,6 +392,22 @@ classes:
     micro_contrast: 0.1837
     edge_density: 0.0624
     specular_pct: 0.004
+    base_chroma_rgb:
+    - 0.501950195019502
+    - 0.23812381238123811
+    - 0.25992599259925997
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: axial
+    vascular_strength: 0.12090350877192987
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.524
+    target_vessel_pattern: 0.03253
+    chroma_n_frames: 97
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   13:
     base_hue: 0.808
     saturation: 0.22
@@ -215,6 +422,18 @@ classes:
     micro_contrast: 0.25
     edge_density: 0.09
     specular_pct: 0.1
+    base_chroma_rgb:
+    - 0.55
+    - 0.22999999999999993
+    - 0.22000000000000003
+    base_value_srgb: 0.65
+    chroma_status: provisional_common_prior_within_user_ranges_not_class_measurement
+    color_space_assumption: sRGB, R-max/B-min; verify aggregate extraction definition
+    pattern: axial
+    vascular_strength: 0.18
+    vascular_status: provisional_until_shared_chroma_file_available
+    pattern_strength: 0.3
+    smooth_shading: true
   14:
     base_hue: 0.869
     saturation: 0.22
@@ -229,6 +448,22 @@ classes:
     micro_contrast: 0.2079
     edge_density: 0.0763
     specular_pct: 0.047
+    base_chroma_rgb:
+    - 0.5006
+    - 0.2419
+    - 0.2575
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: axial
+    vascular_strength: 0.196359649122807
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5156
+    target_vessel_pattern: 0.04035
+    chroma_n_frames: 66
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   15:
     base_hue: 0.93
     saturation: 0.22
@@ -243,6 +478,22 @@ classes:
     micro_contrast: 0.2352
     edge_density: 0.0796
     specular_pct: 0.087
+    base_chroma_rgb:
+    - 0.5313
+    - 0.2336
+    - 0.2351
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: axial
+    vascular_strength: 0.20832456140350883
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5676
+    target_vessel_pattern: 0.04159
+    chroma_n_frames: 124
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   16:
     base_hue: 0.991
     saturation: 0.22
@@ -257,6 +508,22 @@ classes:
     micro_contrast: 0.2524
     edge_density: 0.0919
     specular_pct: 0.211
+    base_chroma_rgb:
+    - 0.45874587458745875
+    - 0.2591259125912591
+    - 0.28212821282128214
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: axial
+    vascular_strength: 0.1638421052631579
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.4402
+    target_vessel_pattern: 0.03698
+    chroma_n_frames: 111
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   17:
     base_hue: 0.052
     saturation: 0.22
@@ -271,6 +538,22 @@ classes:
     micro_contrast: 0.201
     edge_density: 0.0975
     specular_pct: 0.009
+    base_chroma_rgb:
+    - 0.4945
+    - 0.2418
+    - 0.2637
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: axial
+    vascular_strength: 0.13402631578947374
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5113
+    target_vessel_pattern: 0.03389
+    chroma_n_frames: 19
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   18:
     base_hue: 0.113
     saturation: 0.22
@@ -285,6 +568,22 @@ classes:
     micro_contrast: 0.2011
     edge_density: 0.0628
     specular_pct: 0.071
+    base_chroma_rgb:
+    - 0.4619
+    - 0.2552
+    - 0.2829
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: lung_septa
+    vascular_strength: 0.0
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.1
+    target_saturation: 0.4472
+    target_vessel_pattern: 0.02727
+    chroma_n_frames: 127
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   19:
     base_hue: 0.174
     saturation: 0.22
@@ -299,6 +598,22 @@ classes:
     micro_contrast: 0.283
     edge_density: 0.1099
     specular_pct: 0.185
+    base_chroma_rgb:
+    - 0.4791
+    - 0.2524
+    - 0.2685
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: granular
+    vascular_strength: 0.21334210526315792
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.4761
+    target_vessel_pattern: 0.04211
+    chroma_n_frames: 104
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   20:
     base_hue: 0.235
     saturation: 0.22
@@ -313,6 +628,22 @@ classes:
     micro_contrast: 0.2637
     edge_density: 0.1014
     specular_pct: 0.185
+    base_chroma_rgb:
+    - 0.5038
+    - 0.2605
+    - 0.2357
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: lobules
+    vascular_strength: 0.20890350877192984
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5365
+    target_vessel_pattern: 0.04165
+    chroma_n_frames: 137
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   21:
     base_hue: 0.296
     saturation: 0.22
@@ -327,6 +658,18 @@ classes:
     micro_contrast: 0.25
     edge_density: 0.09
     specular_pct: 0.1
+    base_chroma_rgb:
+    - 0.55
+    - 0.22999999999999993
+    - 0.22000000000000003
+    base_value_srgb: 0.65
+    chroma_status: provisional_common_prior_within_user_ranges_not_class_measurement
+    color_space_assumption: sRGB, R-max/B-min; verify aggregate extraction definition
+    pattern: axial
+    vascular_strength: 0.18
+    vascular_status: provisional_until_shared_chroma_file_available
+    pattern_strength: 0.3
+    smooth_shading: true
   22:
     base_hue: 0.357
     saturation: 0.22
@@ -341,6 +684,18 @@ classes:
     micro_contrast: 0.25
     edge_density: 0.09
     specular_pct: 0.1
+    base_chroma_rgb:
+    - 0.55
+    - 0.22999999999999993
+    - 0.22000000000000003
+    base_value_srgb: 0.65
+    chroma_status: provisional_common_prior_within_user_ranges_not_class_measurement
+    color_space_assumption: sRGB, R-max/B-min; verify aggregate extraction definition
+    pattern: membrane
+    vascular_strength: 0.18
+    vascular_status: provisional_until_shared_chroma_file_available
+    pattern_strength: 0.3
+    smooth_shading: true
   23:
     base_hue: 0.418
     saturation: 0.22
@@ -355,20 +710,54 @@ classes:
     micro_contrast: 0.2874
     edge_density: 0.1212
     specular_pct: 0.476
+    base_chroma_rgb:
+    - 0.5336
+    - 0.2206
+    - 0.2458
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: axial
+    vascular_strength: 0.34061403508771937
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5481
+    target_vessel_pattern: 0.0553
+    chroma_n_frames: 9
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   24:
     base_hue: 0.479
     saturation: 0.22
     value: 0.55
-    roughness: 0.5333
-    specular: 0.2785
+    roughness: 0.14
+    specular: 0.5
     bump_strength: 0.2994
-    bump_distance_mm: 0.25
+    bump_distance_mm: 0.08
     noise_scale: 1.6639
     texture_color_strength: 0.2047
     status: heuristic_from_shared_statistics
     micro_contrast: 0.4094
     edge_density: 0.1183
     specular_pct: 0.05
+    base_chroma_rgb:
+    - 0.6414
+    - 0.1651
+    - 0.1935
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: liquid
+    vascular_strength: 0.0
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.7447
+    target_vessel_pattern: 0.07696
+    chroma_n_frames: 70
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
+    appearance_override: liquid surrogate per later user instruction; not measured
+      BSDF
   25:
     base_hue: 0.54
     saturation: 0.22
@@ -383,6 +772,22 @@ classes:
     micro_contrast: 0.3336
     edge_density: 0.1207
     specular_pct: 0.073
+    base_chroma_rgb:
+    - 0.5272
+    - 0.2325
+    - 0.2403
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: rough
+    vascular_strength: 0.3059736842105264
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5675
+    target_vessel_pattern: 0.05171
+    chroma_n_frames: 132
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   26:
     base_hue: 0.601
     saturation: 0.22
@@ -397,6 +802,22 @@ classes:
     micro_contrast: 0.2254
     edge_density: 0.0626
     specular_pct: 0.095
+    base_chroma_rgb:
+    - 0.5305
+    - 0.2396
+    - 0.2299
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: membrane
+    vascular_strength: 0.177640350877193
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5617
+    target_vessel_pattern: 0.03841
+    chroma_n_frames: 16
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   27:
     base_hue: 0.662
     saturation: 0.22
@@ -411,6 +832,18 @@ classes:
     micro_contrast: 0.25
     edge_density: 0.09
     specular_pct: 0.1
+    base_chroma_rgb:
+    - 0.55
+    - 0.22999999999999993
+    - 0.22000000000000003
+    base_value_srgb: 0.65
+    chroma_status: provisional_common_prior_within_user_ranges_not_class_measurement
+    color_space_assumption: sRGB, R-max/B-min; verify aggregate extraction definition
+    pattern: axial
+    vascular_strength: 0.18
+    vascular_status: provisional_until_shared_chroma_file_available
+    pattern_strength: 0.3
+    smooth_shading: true
   28:
     base_hue: 0.723
     saturation: 0.22
@@ -425,6 +858,22 @@ classes:
     micro_contrast: 0.2962
     edge_density: 0.1142
     specular_pct: 0.589
+    base_chroma_rgb:
+    - 0.5397
+    - 0.2144
+    - 0.2459
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: axial
+    vascular_strength: 0.31571929824561407
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.565
+    target_vessel_pattern: 0.05272
+    chroma_n_frames: 15
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   29:
     base_hue: 0.784
     saturation: 0.22
@@ -439,6 +888,22 @@ classes:
     micro_contrast: 0.2597
     edge_density: 0.085
     specular_pct: 0.124
+    base_chroma_rgb:
+    - 0.6048604860486049
+    - 0.22522252225222522
+    - 0.1699169916991699
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: lobules
+    vascular_strength: 0.37689473684210534
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.686
+    target_vessel_pattern: 0.05906
+    chroma_n_frames: 21
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
   30:
     base_hue: 0.845
     saturation: 0.22
@@ -453,3 +918,28 @@ classes:
     micro_contrast: 0.2454
     edge_density: 0.1035
     specular_pct: 0.066
+    base_chroma_rgb:
+    - 0.5018
+    - 0.2573
+    - 0.2409
+    base_value_srgb: 0.65
+    chroma_status: measured_shared_aggregate_normalized_for_rounding
+    color_space_assumption: sRGB-encoded measured RGB; verify extractor transfer function
+    pattern: axial
+    vascular_strength: 0.12669298245614036
+    vascular_status: monotonic_initial_mapping_not_fitted_rendered_statistic
+    pattern_strength: 0.3
+    target_saturation: 0.5202
+    target_vessel_pattern: 0.03313
+    chroma_n_frames: 13
+    vessel_chroma_delta_r: 0.08
+    smooth_shading: true
+tissue_patterns:
+  enabled: true
+  vascular_seed: 611
+  vascular_tile_size: 512
+  vascular_tile_mm: 30.0
+  lobule_scale_per_mm: 0.6
+  ring_spacing_mm: 3.0
+  axial_spacing_mm: 0.6
+chroma_source_sha256: 9013c096fb4a79062659c20ee72b8c2b8a0c5aec76c0a3102359cd7f95450718
