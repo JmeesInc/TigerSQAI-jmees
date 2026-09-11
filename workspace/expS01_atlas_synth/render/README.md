@@ -1,3 +1,7 @@
+# Tier 1 RGB
+
+`--emit-rgb --materials configs/materials.yaml` enables same-render EEVEE RGB / scalar-ID / depth. See `docs/tier1_20260911.md` for replay of existing synthetic batches and the Cycles-to-EEVEE exact-match limitation.
+
 # Round 4 update
 
 The active reference is `assets/reference_anatomy_only.yaml`: IDs 3–30, per-frame anatomy normalization. Instruments are disabled; no circular FOV mask is generated. Round 3 reports cannot unlock the bank. See `docs/round4_20260909.md`.

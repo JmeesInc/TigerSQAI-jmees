@@ -155,3 +155,14 @@ Claudeの2acdaf2を取り込み、心膜proxyのIPV保護減算、実剥離開�
 128枚/256×144/Blender4.5.9 CPU2並列は106.2秒。出現率誤差461.77pp、面積誤差68.16pp、Pleura38.39%、Lung4.24%、解剖クラス中央値12、背景中央値0%。背景・クラス数・出現誤差は改善したが面積誤差悪化で不合格。12/8/9は出現したがIPV出現17.19%へ低下。バンクは未生成・生成ゲート閉鎖。26テストと128枚監査通過。全クラス結果はdocs/round4_results_20260909.md。
 
 Round 3の合格レポートはschema_version=2ゲートで拒否。Linuxはまず今回設定を128枚で再現・診断すること。統計的に受入済みとして2048枚生成へ進めない。実データ・個別マスク・個別姿勢・生成画像をGitへ同期していない。
+
+
+## 2026-09-11 Tier 1 RGB seeds
+
+--emit-rgb を追加。EEVEE1sampleの同じrenderからCombined RGB / Depth / pass_index直結FineID VALUE AOVを同時出力し、共通の最近傍歪みmapを使う。標準Object IndexはEEVEEで出ないためscalar AOVで取得、非整数IDは拒否。クラスごとのプロシージャル材質は共有264枚の集計を単調変換した初期値で、物理材質の推定値とは扱わない。configs/materials.yamlとassets/real_class_texture.yamlを追加。
+
+カメラ同位置の点光源、環境0。自動光源範囲fadeを避ける明示的cutoff設定で50/100mmの線形輝度比4.000を実機確認。1024×576最終4枚は準備込み18.56秒、採択render中央値0.401秒。Mac/Blender4.5.9/EEVEE。29単体テスト、4枚の出力監査・RGB境界診断通過。再出力4枚はRGB/label/depth全12ファイルのSHAが完全一致。
+
+render.replay_rgbは保存camera/歪み・geometryから再出力。旧geometry snapshotなしはbase/envelopeと元の進行度RNGから復元し剥離meta一致を要求。旧器具ありsnapshotなしは拒否。既存CyclesラベルとのEEVEE比較では各2画素/256×144の差を確認、厳密guardでRGB保存前に停止した。新しい三点を採用する --rerender-triplet と、明示的Cycles互換 --engine cycles（今回未検証）を用意。自動fallbackしない。
+
+ユーザーに既存2000枚の扱いを質問済み、まだ回答なし。このMacにoutputs/pretrain_2kは存在せず、そのバッチ自体は処理していない。新規EEVEE生成は実行可能。実データは未アクセス、共有材質統計のみ使用。手順・制約・速度はdocs/tier1_20260911.md。Round4の解剖統計未達ゲートは解除していない。

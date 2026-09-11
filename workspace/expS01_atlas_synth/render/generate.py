@@ -225,6 +225,10 @@ def worker_loop(worker_id,frame_indices,args,camera,dissection,volume,landmarks,
                     if rng.random()>count_probability:
                         rejections['soft class-count prior']+=1;continue
                     write_outputs(output,frame_id,label,axial)
+                    if camera.get('emit_rgb',False):
+                        from .rgb import write_rgb
+                        write_rgb(raw,output/'rgb'/f'{frame_id}.png',grid,axial,camera['materials'])
+                    save_meshes(output/'geometry'/f'{frame_id}.npz',items)
                     counts=np.bincount(label.ravel(),minlength=31)
                     elapsed=time.perf_counter()-start
                     meta={'frame_id':frame_id,'patient_id':camera['patient_id'],'seed':camera['seed'],
@@ -233,13 +237,13 @@ def worker_loop(worker_id,frame_indices,args,camera,dissection,volume,landmarks,
                           'class_pixel_counts':{str(i):int(v) for i,v in enumerate(counts)},
                           'visible_stations':None,'station_nomenclature':'要確認',
                           'station_status':'not_implemented_task_D','depth':{'channel':'Z','unit':'mm',
-                          'meaning':'linear camera axial Z from Cycles Depth.Z','invalid_value':0.,
-                          'distorted':bool(camera['distortion']['enabled']),'interpolation':'nearest'},'label_encoding':'PNG uint8 grayscale; Object Index pass',
+                          'meaning':'linear camera axial Z from '+result.get('engine','CYCLES')+' Depth.Z','invalid_value':0.,
+                          'distorted':bool(camera['distortion']['enabled']),'interpolation':'nearest'},'label_encoding':'PNG uint8 grayscale; '+result['pass_method'],
                           'missing_anatomy_class_ids':provenance['unavailable_class_ids'],
                           'provisional_structures':provenance['provisional_structures'],
                           'class_count_acceptance_probability':count_probability,
                           'provenance_sha256':sha256(output/'provenance.json'),'config_sha256':provenance['config_sha256'],
-                          'geometry/render':result,'rejection_counts':dict(rejections),'frame_wall_seconds':elapsed,
+                          'rgb':{'enabled':bool(camera.get('emit_rgb',False)),'same_render_as_label_depth':bool(camera.get('emit_rgb',False)),'shared_nearest_distortion_grid':True},'geometry_sha256':sha256(output/'geometry'/f'{frame_id}.npz'),'geometry/render':result,'rejection_counts':dict(rejections),'frame_wall_seconds':elapsed,
                           'valid_optics_fraction':float(grid[2].mean()),'instrument_count':sum(o['fine_id']==1 for o in items),
                           'procedural_instance_counts':dict(Counter(str(o['fine_id']) for o in items))}
                     atomic_json(output/'meta'/f'{frame_id}.json',meta)
@@ -266,6 +270,7 @@ def main():
     p.add_argument('--threads-per-worker',type=int,default=2)
     p.add_argument('--seed',type=int);p.add_argument('--resolution',nargs=2,type=int);p.add_argument('--progress',type=float)
     p.add_argument('--patient',help='Optional reviewed public CT masks + paired-landmark YAML')
+    p.add_argument('--emit-rgb',action='store_true');p.add_argument('--materials',default='configs/materials.yaml')
     p.add_argument('--allow-provisional',action='store_true');p.add_argument('--keep-raw',action='store_true')
     p.add_argument('--disable-provisional-structures',action='store_true',help='Disable all added anatomy proxies, independent of atlas identity status')
     p.add_argument('--startup-timeout',type=float,default=240)
@@ -278,11 +283,12 @@ def main():
     if args.seed is not None:camera['seed']=args.seed
     if args.resolution:camera['resolution']=args.resolution
     camera['threads_per_worker']=args.threads_per_worker
+    if args.emit_rgb:camera.update(emit_rgb=True,materials=load_yaml(args.materials))
     validate(camera,dissection,atlas)
     output=args.output.resolve()
     if output.exists() and any(output.iterdir()):p.error('Output must be absent or empty (no overwrite)')
     output.mkdir(parents=True,exist_ok=True)
-    for name in ['label','depth','meta','logs','raw']: (output/name).mkdir()
+    for name in ['label','depth','meta','logs','raw','rgb','geometry']: (output/name).mkdir()
     atomic_json(output/'resolved_configs.json',{'camera':camera,'dissection':dissection,'atlas':atlas})
     started=time.perf_counter()
     _,volume,landmarks,ports,provenance=prepare(args,camera,dissection,atlas,output)
@@ -292,7 +298,7 @@ def main():
         futures=[pool.submit(worker_loop,i,list(range(i,args.frames,workers)),args,camera,dissection,volume,landmarks,ports,provenance,output) for i in range(workers)]
         results=[r for f in futures for r in f.result()]
     elapsed=time.perf_counter()-started
-    atomic_json(output/'metrics.json',{'frames':len(results),'workers':workers,'device':camera['device'],
+    atomic_json(output/'metrics.json',{'frames':len(results),'workers':workers,'device':camera['device'],'engine':'BLENDER_EEVEE_NEXT' if camera.get('emit_rgb',False) else 'CYCLES',
         'preparation_seconds':prepared-started,'total_seconds':elapsed,'amortized_seconds_per_frame':elapsed/len(results),
         'median_render_seconds':float(np.median([r['render_seconds'] for r in results])),'frames_detail':results})
     print(f'Completed {len(results)} frames in {elapsed:.1f}s: {output}',flush=True)

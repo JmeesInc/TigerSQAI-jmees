@@ -13,6 +13,8 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from render.util import load_meshes,atomic_json
 
 
+MATERIALS={}
+
 def make_object(item,collection):
     mesh=bpy.data.meshes.new(item['name'])
     mesh.from_pydata(item['v'].tolist(),[],item['f'].tolist())
@@ -20,6 +22,7 @@ def make_object(item,collection):
     obj=bpy.data.objects.new(item['name'],mesh)
     collection.objects.link(obj)
     obj.pass_index=int(item['fine_id'])
+    if MATERIALS:obj.data.materials.append(MATERIALS[obj.pass_index])
     return obj
 
 
@@ -77,7 +80,7 @@ def setup(config,base):
     if hasattr(scene.cycles,'filter_width'):scene.cycles.filter_width=float(config['filter_size'])
     if hasattr(scene.render,'use_motion_blur'):scene.render.use_motion_blur=False
     device=config['device'].upper()
-    if device!='CPU':
+    if device!='CPU' and (not config.get('emit_rgb',False) or config.get('materials',{}).get('engine')=='CYCLES'):
         prefs=bpy.context.preferences.addons['cycles'].preferences
         prefs.compute_device_type=device
         prefs.get_devices()
@@ -105,6 +108,11 @@ def setup(config,base):
     scene.render.use_sequencer=False
     scene.render.threads_mode='FIXED'
     scene.render.threads=int(config.get('threads_per_worker',2))
+    global MATERIALS
+    MATERIALS={}
+    if config.get('emit_rgb',False):
+        from render.materials import configure
+        MATERIALS,_=configure(scene,config['materials'])
     for item in base:make_object(item,scene.collection)
     cam=bpy.data.cameras.new('RigidScope')
     cam.type='PERSP';cam.sensor_fit='HORIZONTAL';cam.sensor_width=config['scope']['sensor_width_mm']
@@ -156,12 +164,13 @@ def main():
             scene.render.pixel_aspect_y=max(1.,aspect)
             cam.data.shift_x=((w-1)/2-k[0][2])/w
             cam.data.shift_y=(k[1][2]-(h-1)/2)*aspect/w
+            if config.get('emit_rgb',False):scene.objects['ScopePoint'].location=cam.location
             scene.render.filepath=job['raw_exr']
             bpy.context.view_layer.update()
             bpy.ops.render.render(write_still=True)
             atomic_json(job['response'],{'accepted_geometry':True,'render_seconds':time.perf_counter()-start,
                         'blender_version':bpy.app.version_string,'filter_size':scene.render.filter_size,
-                        'pass_method':'Object Index / pass_index; no RGB decoding'})
+                        'pass_method':'pass_index -> scalar FineID AOV' if config.get('emit_rgb',False) else 'Object Index / pass_index; no RGB decoding','engine':scene.render.engine})
         except Exception as error:
             atomic_json(job['response'],{'accepted_geometry':False,'reason':str(error),
                                         'traceback':traceback.format_exc()})

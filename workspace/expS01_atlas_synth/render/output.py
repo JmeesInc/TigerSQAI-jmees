@@ -12,7 +12,7 @@ def read_passes(path):
             hits=[k for k in channels if any(token.lower() in k.lower() for token in tokens)]
             if len(hits)!=1:raise ValueError(f'Ambiguous/missing pass {tokens}: {list(channels)}')
             return channels[hits[0]].pixels.copy()
-        index=get(['IndexOB','Object Index'])
+        index=get(['IndexOB','Object Index']) if any('IndexOB' in k or 'Object Index' in k for k in channels) else get(['FineID.X'])
         depth=get(['Depth.Z'])
     if not np.isfinite(index).all() or np.max(np.abs(index-np.rint(index)))>1e-5:
         raise ValueError('Object Index contains nonintegral/invalid values; refuse color or AA recovery')
