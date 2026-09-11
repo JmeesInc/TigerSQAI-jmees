@@ -1,3 +1,5 @@
+探索用の元材質バックエンド（①）と外部素材の調査（②）は [比較記録](../docs/tier1_native_and_external_exploration_20260911.md) を参照。①は試写済みですが、術野の見た目の改善策としては採用していません。
+
 # Appearance v2
 
 Current defaults use shared chroma plus organ-specific procedural patterns. See `docs/tier1_appearance_v2_20260911.md`. Geometry and class IDs remain unchanged; EEVEE replays were checked for exact label/depth equality.

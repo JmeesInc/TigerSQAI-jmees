@@ -14,6 +14,7 @@ from render.util import load_meshes,atomic_json
 
 
 MATERIALS={}
+NATIVE_MATERIALS=None
 
 def make_object(item,collection):
     mesh=bpy.data.meshes.new(item['name'])
@@ -28,6 +29,7 @@ def make_object(item,collection):
         from render.tissue_patterns import texture_axes,texture_transverse
         for name,values in [('tissue_axial_mm',texture_axes(item['v'])),('tissue_transverse_mm',texture_transverse(item['v']))]:
             attribute=mesh.attributes.new(name,'FLOAT','POINT');attribute.data.foreach_set('value',np.asarray(values,dtype=np.float32))
+    if NATIVE_MATERIALS is not None:NATIVE_MATERIALS.apply(obj,item)
     return obj
 
 
@@ -113,11 +115,15 @@ def setup(config,base):
     scene.render.use_sequencer=False
     scene.render.threads_mode='FIXED'
     scene.render.threads=int(config.get('threads_per_worker',2))
-    global MATERIALS
+    global MATERIALS,NATIVE_MATERIALS
     MATERIALS={}
+    NATIVE_MATERIALS=None
     if config.get('emit_rgb',False):
         from render.materials import configure
         MATERIALS,_=configure(scene,config['materials'])
+        if config['materials'].get('native_atlas',{}).get('enabled',False):
+            from render.native_materials import NativeMaterials
+            NATIVE_MATERIALS=NativeMaterials(config['materials']['native_atlas'])
     for item in base:make_object(item,scene.collection)
     cam=bpy.data.cameras.new('RigidScope')
     cam.type='PERSP';cam.sensor_fit='HORIZONTAL';cam.sensor_width=config['scope']['sensor_width_mm']

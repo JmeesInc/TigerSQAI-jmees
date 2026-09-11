@@ -175,3 +175,9 @@ render.replay_rgbは保存camera/歪み・geometryから再出力。旧geometry 
 同じ1024×576の4カメラで材質変更前後のlabel/depth/geometry全12ファイルSHA完全一致、境界診断4/4、33単体テスト通過。描画16クラスの無加重MAEはr色度0.17035→0.02145、彩度0.42408→0.03808。4枚の診断であり、拡散後忠実度は未検証。Mac/EEVEE再出力16.69秒/4枚、shader compile後の最後2枚renderは0.87/0.99秒。
 
 383c5da内の指示でユーザーが --rerender-triplet を採用したことを確認済み。Linuxの既存2000枚は同じcameraからEEVEE RGB/label/depthを一緒に再出力する。元2000枚はこのMacにないため全件処理は未実施。手順: docs/tier1_appearance_v2_20260911.md。材質だけの改訂で、Round4の解剖統計ゲートを解除するものではない。実画像・実マスクは未参照。
+
+## 2026-09-11 ①元材質の実試験 / ②公開PBR探索
+
+ユーザーから③の見た目が不十分との指摘。①を優先して実装・比較したが、29解剖オブジェクト/21元材質の不透明表面には画像/微細Noise/bumpがなく、血管が青紫・リンパ節が緑になる図譜配色。①は比較用バックエンドとして残し、改善策として既定採用しない。元の透過/断面/comic表示を除去し、不透明Principledと元の面材質/UVを転写する。肺材質のBLENDEDがAOVを壊した試験を検知・修正済み。最終4枚EEVEEでは元③のlabel/depth/geometry全12ファイルSHA一致、境界4/4、35テスト通過。8.74秒/4枚、描画0.89〜1.28秒。docs/tier1_native_and_external_exploration_20260911.md に比較・コマンド・各候補のライセンスを記録。
+
+次に選ぶなら②。neshalladsのRealistic Human Lungsはブラウザ実ページでCC BY4.0・無料Download確認、ログイン要求のため未取得。実体/UV/PBR品質は未検証。Human Anatomy Organs PackはNoAIを確認して除外。unlim3dの元候補は配布許諾未確認。BlenderKit肺はRoyalty free（CC0ではない）。MeshyはCC0案内があるがAI生成由来の適格性未確認。OpenGameArtのScribe肺はCC0として取得・監査したがUVなし、画像未同梱、旧Cloudsのみで不採用。新たな外部PBRを訓練用出力には使っていない。候補②の公開ファイルを取得後に肺のみ転写比較を行う。生成側のカメラ/ジオメトリ/剥離は変更していない。
