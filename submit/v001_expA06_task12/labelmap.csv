@@ -1,0 +1,32 @@
+fine_id,fine_name,fine_r,fine_g,fine_b,weight,type,merged_id,merged_name,merged_r,merged_g,merged_b
+0,Background,0,0,0,1,Non-anatomical,0,Background,0,0,0
+1,Instrument,184,61,245,1,Non-anatomical,12,Non-anatomical Other,184,61,245
+2,Other,134,0,251,1,Non-anatomical,12,Non-anatomical Other,184,61,245
+3,Trachea,0,255,220,2,Anatomical,1,Respiratory Tract,0,255,220
+4,Right main bronchus,131,224,112,2,Anatomical,1,Respiratory Tract,0,255,220
+5,Left main bronchus,191,224,112,2,Anatomical,1,Respiratory Tract,0,255,220
+6,Esophagus,253,189,0,2,Anatomical,2,Gastroesophageal,253,189,0
+7,Fatty tissue esophagus,255,224,32,1,Anatomical,2,Gastroesophageal,253,189,0
+8,Right inferior pulmonary ligament,207,164,117,3,Anatomical,3,Pleura,15,126,87
+9,Left inferior pulmonary ligament,234,204,159,3,Anatomical,3,Pleura,15,126,87
+10,Pleura,15,126,87,2,Anatomical,3,Pleura,15,126,87
+11,Pericardium,153,76,13,2,Anatomical,4,Heart,153,76,13
+12,Inferior pulmonary vein,51,221,255,2,Anatomical,4,Heart,153,76,13
+13,Right subclavian artery,255,142,142,3,Anatomical,5,Vessels,255,142,142
+14,Right vagal nerve,255,239,179,3,Anatomical,6,Nerves,255,239,179
+15,Aorta,255,0,7,2,Anatomical,7,Aorta,255,0,7
+16,Azygos vein,0,6,255,2,Anatomical,8,Azygos Vein,0,6,255
+17,Superior caval vein,50,183,250,2,Anatomical,9,Superior Caval Vein,50,183,250
+18,Lung,17,139,57,1,Anatomical,10,Lung,17,139,57
+19,Lymph node,255,0,204,3,Anatomical,11,Lymphatic Tissue,255,0,204
+20,Fatty tissue,250,250,55,1,Anatomical,13,Fatty Tissue,250,250,55
+21,Left subclavian artery,255,136,178,3,Anatomical,5,Vessels,255,142,142
+22,Right bronchial artery,255,73,162,3,Anatomical,5,Vessels,255,142,142
+23,Pulmonary artery,255,161,136,3,Anatomical,14,Pulmonary artery,255,161,136
+24,Pool of blood,173,0,0,1,Anatomical,15,Anatomical Other,173,0,0
+25,Resection area,128,128,128,1,Anatomical,15,Anatomical Other,173,0,0
+26,Gastric conduit,245,147,49,1,Anatomical,2,Gastroesophageal,253,189,0
+27,Right recurrent laryngeal nerve,218,161,69,3,Anatomical,6,Nerves,255,239,179
+28,Left recurrent laryngeal nerve,255,217,129,3,Anatomical,6,Nerves,255,239,179
+29,Omentum,219,219,56,1,Anatomical,2,Gastroesophageal,253,189,0
+30,Thoracic duct,201,138,118,1,Anatomical,15,Anatomical Other,173,0,0

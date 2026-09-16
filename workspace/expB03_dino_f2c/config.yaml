@@ -1,0 +1,48 @@
+experiment:
+  name: expB03_dino_f2c
+  seed: 42
+
+paths:
+  images_dir: workspace/data_proc/images_1024
+  labels_fine_dir: workspace/data_proc/labels_fine_1024
+  labels_coarse_dir: workspace/data_proc/labels_coarse_1024
+  class_weights: workspace/data_proc/class_weights.json
+  results_root: workspace/expB03_dino_f2c/results
+  # OOF 推論 (元解像度) 用
+  orig_images_dir: data/images
+  labelmap_csv: data/labelmap.csv
+
+cv:
+  folds_csv: workspace/fold/v1/folds.csv
+
+wandb:
+  enabled: true
+  project: tigersqai
+  # run 名は experiment.name で全 fold 共通、fold 分けは group=str(fold)
+
+model:
+  encoder_name: maxvit_dinov3_fusion
+  encoder_weights: imagenet          # tu- では non-None で timm pretrained=True
+  decoder_channels: [256, 128, 64, 32, 16]
+  num_classes_fine: 31
+  num_classes_coarse: 16
+
+data:
+  img_h: 576
+  img_w: 1024
+  batch_size: 2
+  num_workers: 8
+
+loss:
+  name: dice                # dice | dicece | dicefocal
+  task1_weight: 0.5
+  task2_weight: 0.5
+  fine2coarse_weight: 0.25
+
+train:
+  epochs: 60
+  lr: 2.0e-4
+  weight_decay: 0.01
+  warmup_epochs: 3
+  accumulate_grad_batches: 4
+  precision: 16-mixed

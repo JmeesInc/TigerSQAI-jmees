@@ -1,0 +1,62 @@
+experiment:
+  name: expA23_p_heavy
+  seed: 42
+paths:
+  images_dir: workspace/data_proc/images_1024
+  labels_fine_dir: workspace/data_proc/labels_fine_1024
+  labels_coarse_dir: workspace/data_proc/labels_coarse_1024
+  images_pseudo_dir: workspace/data_proc/images_pseudo_1024
+  labels_fine_pseudo_dir: workspace/data_proc/labels_fine_pseudo_1024
+  labels_coarse_pseudo_dir: workspace/data_proc/labels_coarse_pseudo_1024
+  class_weights: workspace/data_proc/class_weights.json
+  results_root: workspace/expA23_sweep/results
+  orig_images_dir: data/images
+  labelmap_csv: data/labelmap.csv
+cv:
+  folds_csv: workspace/fold/v2/folds.csv
+wandb:
+  enabled: true
+  project: tigersqai
+model:
+  source: timm
+  arch: unetplusplus
+  encoder_name: tu-convnext_large.fb_in22k_ft_in1k_384
+  encoder_weights: imagenet
+  decoder_channels:
+  - 256
+  - 128
+  - 64
+  - 32
+  - 16
+  num_classes_fine: 31
+  num_classes_coarse: 16
+data:
+  img_h: 576
+  img_w: 1024
+  batch_size: 2
+  num_workers: 8
+  aug: strong
+  hflip: true
+loss:
+  name: dice
+  task1_weight: 0.5
+  task2_weight: 0.5
+  fine2coarse_weight: 0.25
+val:
+  hd_last_epochs: 3
+  hd_subsample: 2
+train:
+  epochs: 20
+  lr: 0.0002
+  weight_decay: 0.01
+  warmup_epochs: 3
+  accumulate_grad_batches: 4
+  precision: 16-mixed
+  prune_ckpt: false
+pseudo:
+  enabled: true
+  index_csv: workspace/data_proc/pseudo_index.csv
+  fraction: 0.7
+  loss_weight: 0.5
+  min_coverage: 0.7
+  real_only_last_epochs: 6

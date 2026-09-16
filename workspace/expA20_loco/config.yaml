@@ -1,0 +1,51 @@
+experiment:
+  name: expA20_loco
+  seed: 42
+
+paths:
+  images_dir: workspace/data_proc/images_1024
+  labels_fine_dir: workspace/data_proc/labels_fine_1024
+  labels_coarse_dir: workspace/data_proc/labels_coarse_1024
+  class_weights: workspace/data_proc/class_weights.json
+  results_root: workspace/expA20_loco/results
+  # OOF 推論 (元解像度) 用
+  orig_images_dir: data/images
+  labelmap_csv: data/labelmap.csv
+
+cv:
+  folds_csv: workspace/fold/loco/folds.csv   # fold = センター番号 (LOCO)
+
+wandb:
+  enabled: true
+  project: tigersqai
+  # run 名は experiment.name で全 fold 共通、fold 分けは group=str(fold)
+
+model:
+  encoder_name: tu-convnext_base
+  encoder_weights: imagenet   # 対照: CholecSeg8k を使わず ImageNet のみ (encoder だけ初期化)
+  decoder_channels: [256, 128, 64, 32, 16]   # C=0 段を落とすため実質 4 段 (256,128,64,32)
+  num_classes_fine: 31
+  num_classes_coarse: 16
+  # 対照実験なので CholecSeg8k 事前学習は使わない (expA16 との差分はこの 1 点のみ)
+  use_cholec_pretrain: false
+
+data:
+  img_h: 576
+  img_w: 1024
+  batch_size: 2
+  num_workers: 8
+
+loss:
+  name: dice                # dice | dicece | dicefocal
+  task1_weight: 0.5
+  task2_weight: 0.5
+  fine2coarse_weight: 0.25
+
+train:
+  epochs: 20                # A16/A17 とも best が ep14-15。60ep 同士の比較は
+                            # 壊れた曲線の最大値同士だったので、正しい長さで測り直す
+  lr: 2.0e-4                # expA06 と同一 (CNN 系なので SegFormer のような低 lr は不要)
+  weight_decay: 0.01
+  warmup_epochs: 3
+  accumulate_grad_batches: 4
+  precision: 16-mixed

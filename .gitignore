@@ -100,3 +100,25 @@ submit/**/*.zip
 # ===== OS / editor =====
 .DS_Store
 *.swp
+
+# ===== Public release (2026-09-16): model packages, local test data/outputs, decks, backups =====
+submit/**/model/
+submit/**/model_*/
+submit/**/test/
+submit/**/test_v*/
+submit/**/smoke_*/
+submit/**/*_backup.py
+submit/**/*.bak*
+submit/**/*.log
+*.pptx
+*.bak
+*.bak_*
+# contact sheets / qualitative figures contain challenge frames (not redistributable)
+/contact_sheet.png
+submit/writeup/figures/fig2_qualitative_oof.png
+submit/writeup/writeup_draft_v*.md
+submit/**/process_v*.py
+
+# ===== not published =====
+daily_reports/
+claudeSummary.md

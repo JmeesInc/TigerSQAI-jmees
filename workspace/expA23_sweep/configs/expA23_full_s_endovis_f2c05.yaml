@@ -1,0 +1,69 @@
+experiment:
+  name: expA23_full_s_endovis_f2c05
+  seed: 42
+paths:
+  images_dir: workspace/data_proc/images_1024
+  labels_fine_dir: workspace/data_proc/labels_fine_1024
+  labels_coarse_dir: workspace/data_proc/labels_coarse_1024
+  images_pseudo_dir: workspace/data_proc/images_pseudo_1024
+  labels_fine_pseudo_dir: workspace/data_proc/labels_fine_pseudo_1024
+  labels_coarse_pseudo_dir: workspace/data_proc/labels_coarse_pseudo_1024
+  class_weights: workspace/data_proc/class_weights.json
+  results_root: workspace/expA23_sweep/results
+  orig_images_dir: data/images
+  labelmap_csv: data/labelmap.csv
+cv:
+  folds_csv: workspace/fold/v2/folds.csv
+  use_all_data: true
+wandb:
+  enabled: true
+  project: tigersqai
+model:
+  source: timm
+  arch: deeplabv3plus
+  encoder_name: tu-convnext_large.fb_in22k_ft_in1k_384
+  encoder_weights: imagenet
+  decoder_channels:
+  - 256
+  - 128
+  - 64
+  - 32
+  - 16
+  num_classes_fine: 31
+  num_classes_coarse: 16
+  init_from_partial: pre_endovis18_deeplabv3plus/weights.pt
+data:
+  img_h: 576
+  img_w: 1024
+  batch_size: 2
+  num_workers: 8
+  aug: normal
+  hflip: true
+loss:
+  name: dicedet
+  task1_weight: 0.5
+  task2_weight: 0.5
+  fine2coarse_weight: 0.5
+  params:
+    extra_weight: 1.0
+    threshold: 0.5
+val:
+  hd_last_epochs: 3
+  hd_subsample: 2
+train:
+  epochs: 20
+  lr: 0.0002
+  weight_decay: 0.01
+  warmup_epochs: 3
+  accumulate_grad_batches: 4
+  precision: 16-mixed
+  prune_ckpt: false
+rules:
+  enabled: true
+  rules_dir: workspace/anatomy_graph/out_anat3d
+  adj_weight: 1.0
+  excl_weight: 0.1
+  start_epoch: 8
+  ramp_epochs: 5
+  coarse_scale: 1.0
+  presence_pool: 16

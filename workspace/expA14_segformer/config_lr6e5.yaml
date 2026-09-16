@@ -1,0 +1,52 @@
+experiment:
+  name: expA14_segformer_lr6e5
+  seed: 42
+
+paths:
+  images_dir: workspace/data_proc/images_1024
+  labels_fine_dir: workspace/data_proc/labels_fine_1024
+  labels_coarse_dir: workspace/data_proc/labels_coarse_1024
+  class_weights: workspace/data_proc/class_weights.json
+  results_root: workspace/expA14_segformer/results
+  # OOF 推論 (元解像度) 用
+  orig_images_dir: data/images
+  labelmap_csv: data/labelmap.csv
+
+cv:
+  folds_csv: workspace/fold/v2/folds.csv
+
+wandb:
+  enabled: true
+  project: tigersqai
+  # run 名は experiment.name で全 fold 共通、fold 分けは group=str(fold)
+
+model:
+  encoder_name: mit_b5
+  # CholecSeg8k 事前学習 (encoder + decoder) で上書きするので ImageNet DL は不要
+  encoder_weights: null
+  decoder_segmentation_channels: 256
+  num_classes_fine: 31
+  num_classes_coarse: 16
+  # 別プロジェクト stitch_exp の CholecSeg8k 学習済み SegFormer を初期値にする。
+  # fold i -> cholec fold i (CholecSeg8k の分割は本コンペの fold と無関係)
+  use_cholec_pretrain: true
+
+data:
+  img_h: 576
+  img_w: 1024
+  batch_size: 2
+  num_workers: 8
+
+loss:
+  name: dice                # dice | dicece | dicefocal
+  task1_weight: 0.5
+  task2_weight: 0.5
+  fine2coarse_weight: 0.25
+
+train:
+  epochs: 60
+  lr: 6.0e-5                # SegFormer 標準。2e-4 では ep28 以降 0.057 劣化したため
+  weight_decay: 0.01
+  warmup_epochs: 3
+  accumulate_grad_batches: 4
+  precision: 16-mixed

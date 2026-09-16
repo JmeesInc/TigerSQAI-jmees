@@ -1,0 +1,60 @@
+experiment:
+  name: expS03_sw15
+  seed: 42
+
+paths:
+  images_dir: workspace/data_proc/images_1024
+  labels_fine_dir: workspace/data_proc/labels_fine_1024
+  labels_coarse_dir: workspace/data_proc/labels_coarse_1024
+  # expS02 が生成した擬似ラベル (FLF2V クリップ + SAM3 伝播 + ens5 の合意画素)
+  images_pseudo_dir: workspace/data_proc/images_pseudo_1024
+  labels_fine_pseudo_dir: workspace/data_proc/labels_fine_pseudo_1024
+  labels_coarse_pseudo_dir: workspace/data_proc/labels_coarse_pseudo_1024
+  class_weights: workspace/data_proc/class_weights.json
+  results_root: workspace/expS03_pseudo/results
+  # OOF 推論 (元解像度) 用
+  orig_images_dir: data/images
+  labelmap_csv: data/labelmap.csv
+
+cv:
+  folds_csv: workspace/fold/v3/folds.csv
+
+wandb:
+  enabled: true
+  project: tigersqai
+  # run 名は experiment.name で全 fold 共通、fold 分けは group=str(fold)
+
+model:
+  encoder_name: tu-maxvit_base_tf_512.in21k_ft_in1k
+  encoder_weights: imagenet          # tu- では non-None で timm pretrained=True
+  decoder_channels: [256, 128, 64, 32, 16]
+  num_classes_fine: 31
+  num_classes_coarse: 16
+
+data:
+  img_h: 576
+  img_w: 1024
+  batch_size: 2
+  num_workers: 8
+
+loss:
+  name: dice                # dice | dicece | dicefocal
+  task1_weight: 0.5
+  task2_weight: 0.5
+  fine2coarse_weight: 0.25
+
+train:
+  epochs: 60
+  lr: 2.0e-4
+  weight_decay: 0.01
+  warmup_epochs: 3
+  accumulate_grad_batches: 4
+  precision: 16-mixed
+
+pseudo:
+  enabled: true
+  index_csv: workspace/data_proc/pseudo_index.csv
+  fraction: 0.5        # 1 epoch のサンプルのうち擬似が占める割合
+  loss_weight: 0.5     # 擬似サンプルの loss 重み (実データを 1.0 とした相対値)
+  min_coverage: 0.70   # 有効画素率がこれ未満のフレームは使わない
+  real_only_last_epochs: 45   # epoch 15 で実データのみへ切替

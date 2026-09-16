@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 ## このリポジトリについて
 
 **コンペ**: [Tiger SQ-AI-Challenge](https://www.synapse.org/Synapse:syn74209386/wiki/639462)
@@ -9,18 +13,22 @@
 
 ### データ
 
-- `data/` は symlink → `/mnt/data/data4/shared/miccai/EndoVis2026/tiger`（読み取り専用扱い。中身を書き換えない）
+- `data/` は symlink → `<challenge data root>`（読み取り専用扱い。中身を書き換えない）
 - 詳細仕様は **`data/README.md`** と **`survey/competition/overview.md`** が正。要点のみ以下に再掲する
-- 全体は **700 フレーム/50ケース/7センター**（train 40 / test 10、1センターを train から除外）。今ローカルにあるのは **Part 1 = 10 ケース 140 枚**。**Part 2 は 2026/7月公開**（残り train ケース）→ データ追加前提でコードを書く
-- 画像 **140 枚**（`center_1_case_6` 〜 `center_1_case_15` の 10 ケース）。解像度は **1920×1080 が 126 枚 / 1280×720 が 14 枚**（混在に注意。Part 2 で別解像度・別センターが来る可能性）
-- ファイル名 = `{case_id}_{station}.png` 例: `center_1_case_10_6L.png`。**case 単位でグループ構造あり** → fold は **GroupKFold（case でグループ化）**。同一 case が train/val に跨るとリーク
-- マスクは `masks_fine/`（31クラス）と `masks_coarse/`（16クラス）。画像と同名
+- 全体は **700 フレーム/50ケース/7センター**（train 40 / test 10、1センターを train から除外）。**第3バッチ（2026/8中旬）で Task1/2 の訓練データは完全**: ローカルに **524 枚 / 40 ケース / 6 センター**（center_1〜4, 6, 7。**center_5 欠番 = held-out センターとみられる**）
+- **Task 3 のラベルは未完**: `lymph_node_station_visibility.csv` は **308 行のみ**（最終更新 8月末予定。Task1/2 より少ないまま確定の可能性あり）→ Task 3 はラベルのある行だけで学習する設計に
+- 解像度は **1920×1080 ×379 / 3840×2160 ×107 / 1280×720 ×38** の混在（**4K あり**。リサイズ方針と提出時の原寸復元に注意）
+- ファイル名 = `{case_id}_{station}.png` 例: `center_1_case_10_6L.png`。ただし **例外 2 枚**（`center_2_case_8_{12L,6L}_frame_{n}.png`）→ case 抽出は正規表現 `center_\d+_case_\d+` で。**case 単位でグループ構造あり** → fold は **GroupKFold（case でグループ化）**。同一 case が train/val に跨るとリーク
+- マスクは `masks_fine/`（31クラス）と `masks_coarse/`（16クラス）。画像と同名で各 524 枚
 
-### タスク（3つ）
+### タスク（3つ）⚠️ 2026-09-08 に公式が番号を確定（従来の当リポジトリ表記と逆）
 
-1. **Fine セグメンテーション** — 31 クラス（`masks_fine/`）
-2. **Coarse セグメンテーション** — 16 クラス（`masks_coarse/`、fine を解剖グループに統合）
-3. **リンパ節ステーション可視性** — 14 ステーションの **マルチラベル分類**（`lymph_node_station_visibility.csv`）
+1. **Task1 = Coarse（merged）セグメンテーション** — 16 クラス（`masks_coarse/`）→ 提出は `/output/task1/`
+2. **Task2 = Fine セグメンテーション** — 31 クラス（`masks_fine/`）→ 提出は `/output/task2/`
+3. **Task3 = リンパ節ステーション可視性** — 14 ステーションの **マルチラベル分類**（`lymph_node_station_visibility.csv`）
+   - **禁止事項（公式明記）**: ファイル名に含まれる station 情報を予測に使ってはならない（station one-hot 入力は違反）
+
+古い日報・claudeSummary・v001〜v004 の「T1=fine / T2=coarse」表記は歴史的なもの。**提出コードのフォルダ割当てとドキュメントは必ず新定義に従う**（一次情報: `survey/competition/docker_instructions_wiki639935_20260811.md` と最新の `reference/tigersqai_challenge/`）。
 
 ### 評価指標（公式コードで確定）
 
@@ -28,6 +36,23 @@
 - Task1/2 = **Weighted Dice ＋ 正規化 Hausdorff**、Task3 = **Weighted F1(@0.5) ＋ AUROC**。
 - 集約は **画像→case→全体の階層平均**。**CV は必ず case 単位で集約**して測る（最終スコアが case 平均のため）。
 - クラス重み 3/2/1 が効く（weight=3 は小さく重要な10クラス）。詳細・提出フォーマットは `survey/competition/overview.md` §4・§5。
+- クラス数の数え方に注意: `labelmap.csv` は fine 31 ID / merged 16 ID（**背景 ID=0 を含む**）。公式評価は背景を除いた **30 / 15 クラス**を採点する（公式 README の表記はこちら）。
+
+### コマンド（公式評価コード）
+
+`reference/tigersqai_challenge/` で実行（Python ≥ 3.11、`uv sync` または `pip install -r requirements.txt`）:
+
+```bash
+# 合成データで評価パイプライン一式を動作確認（GT 不要）
+uv run python metrics/demo.py --clean
+
+# 実データで評価（gt/ = task1/ task2/ task3.csv、pred/ は method 名のサブディレクトリ）
+uv run python metrics/01_evaluate_challenge.py --gt path/to/gt/ --pred path/to/predictions/ --out report.md --save-json
+```
+
+API 詳細・色テーブル・集約式は `reference/tigersqai_challenge/metrics/00_README.md`。
+
+**プロジェクト本体の Python 環境**: リポジトリ直下の `.venv`（`--system-site-packages` で作成）を必ず使う。user site の transformers 4.57.2 が huggingface_hub 1.7.1 と非互換で lightning の import が死ぬため、venv 内で transformers>=5 を上書きしている。各実験の `run.sh` が自動 activate する（安定したら `requirements.txt` をコミットする）。
 
 ### 最重要の落とし穴
 
@@ -38,14 +63,15 @@
 
 ### 現状の足場
 
-- このリポジトリは **テンプレート初期状態**。`workspace/`・`workspace/fold/`・`daily_reports/` は **まだ存在しない**（下の汎用ルールが参照するが未作成）。実験開始時に作る
-- `reference/tigersqai_challenge/` = **公式評価コード**（NCT/TSO, git submodule 的に配置）、`survey/competition/overview.md` = タスク把握メモ、は作成済み
-- git にはまだ何もコミットされていない（`git ls-files` が空）
+- このリポジトリは **テンプレート初期状態**。実験・fold 定義（`workspace/fold/`）はまだ無い。日報は `daily_reports/20260822.md`（データ棚卸し・改訂タイムライン）から開始
+- `reference/tigersqai_challenge/` = **公式評価コード**（NCT/TSO）、`survey/competition/overview.md` = タスク把握メモ、は作成済み
+- git は初期コミット済み（テンプレート・ドキュメント類のみ）。**`data/`（symlink）・`reference/`・モデル重みは git 管理外**。別マシンへの移設手順は `SETUP.md`（データ/reference は rsync で取得）
 
 ### 提出・締切・ルール（確定。詳細は `survey/competition/overview.md` §5–§7）
 
 - **提出は Docker コンテナ**（zip ではない）。image `tigersqai26_<team>:v<n>` を Synapse evaluation queue へ。**オフライン動作・完全自動**必須。コンテナは公式 evaluator が食う形式（`task1/ task2/ task3.csv`）を出力する。→ `submit/` は **「提出パイプライン (B) Docker コンテナ提出型」** を使う
-- **締切 2026/09/15**（評価開始 9/01、AoE）。**最終提出のみ評価**
+- **締切 2026/09/15**（評価フェーズ開始 **9/06** に延期、AoE）。**最終提出のみ評価**。**Docker 提出受付は開始済み（8月中旬〜）で、早期テスト提出を主催者が強く推奨** → 互換性フィードバックが貰えるので、モデルが未完成でも動く提出を早めに 1 本通す
+- **write-up + 3 分ビデオが必須**（Task1+2 で 1 本、Task3 で別途 1 本）。write-up / Docker instructions は Synapse に公開済み。チャレンジ発表は 2026/09/27（EndoVis セッション、MICCAI はストラスブール開催に変更）
 - **外部データは公開のもののみ可**。非公開データ・非公開データで事前学習した重みは **禁止**（ImageNet 等の公開事前学習は可）。使った外部データは開示・引用
 
 ### ドキュメントの役割分担
@@ -99,7 +125,7 @@ Kaggle だけでなく、grand-challenge.org / CodaBench / 独自プラットフ
 ## 学習コードの鉄則
 
 - **AMP (Mixed Precision) は常にON** (`precision: 16-mixed`)
-- **チェックポイント再開は必須** (`save_last=True` + `ckpt_path`)
+- **チェックポイント再開は必須** (`save_last=True` + `ckpt_path`)。ただし Lightning 2.x の `save_last` は「best 保存時のコピー」でしかなく毎 epoch 保存ではない → `monitor=None, save_top_k=1, every_n_epochs=1` の rolling checkpoint（例: `latest.ckpt`）を別 ModelCheckpoint で必ず併設し、レジュームはそちらを優先する
 - **シード固定** (`pl.seed_everything(seed, workers=True)`)
 - ハイパーパラメータはすべてconfigで管理（ハードコーディング禁止）
 - **ログはPythonの `logging` モジュールで出力する**（`print`禁止）
@@ -258,9 +284,8 @@ submit/v001_baseline/
 
 ## リファレンスコード
 
-- `reference/` に2.5Dセグメンテーションのテンプレートコード（PyTorch Lightning + timm + smp）がある
-- 新しい実験のベースとして活用すること
-- 詳細は `reference/README.md` を参照
+- `reference/` 直下には現在 **`tigersqai_challenge/`（公式評価コード）のみ**がある。2.5D セグメンテーションテンプレート等の学習コード雛形はこのリポジトリには未配置
+- `reference/` は git 管理外（`.gitignore`）。別マシンでは `SETUP.md` の手順で rsync する
 
 ## 利用可能なSkills
 
